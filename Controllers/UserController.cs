@@ -25,16 +25,16 @@ namespace GemManager.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var players = _userRepository.GetAll();
-            return Ok(players);
+            var users = _userRepository.GetAll();
+            return Ok(users);
         }
 
         [HttpGet]
         [Route("{id:int}")]
         public ActionResult Get(int id)
         {
-            var players = _userRepository.GetById(id);
-            return Ok(players);
+            var user = _userRepository.GetById(id);
+            return Ok(user);
         }
 
 
