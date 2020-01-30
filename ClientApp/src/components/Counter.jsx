@@ -17,13 +17,18 @@ export class UserManagement extends Component {
     }
 
     addUser() {
-        let usersCopy = this.state.users.slice(); 
-        usersCopy.push(this.state.user); 
-        //console.log(usersCopy); 
-        this.setState({
-            users: usersCopy
-        });
-        
+        console.log(this.state.user); 
+        fetch('api/user/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }, 
+            body: JSON.stringify({
+                name: this.state.user,
+                rocks: 1
+            })
+        })
     }
 
     
