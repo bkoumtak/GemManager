@@ -13,21 +13,21 @@ export class FetchData extends Component {
 
                 let user = users.find(x => x.id == id);
 
-                if (user.rocks <= 0 && operation === "-") {
+                if (user.gemsToGive <= 0 && operation === "-") {
                     return;
                 }
 
                 if (operation === "+") {
-                    user.rocks += 1;
+                    user.gemsToGive += 1;
                 } else {
-                    user.rocks -= 1;
+                    user.gemsToGive -= 1;
                 }
 
                 console.log(user);
 
                 this.setState({ users: users });
 
-                this.pushUserRocks(user.id, user.rocks);
+                this.pushUserRocks(user.id, user.gemsToGive);
             }
         };
     }
@@ -50,7 +50,7 @@ export class FetchData extends Component {
                     {users.map(user =>
                         <tr key={user.id}>
                             <td>{user.name}</td>
-                            <td>{user.rocks}</td>
+                            <td>{user.gemsToGive}</td>
                             <td align="center"><a onClick={() => addOrSubstractRocks(user.id, "+")}>+</a> | <a onClick={() => addOrSubstractRocks(user.id, "-")}>-</a></td>
                         </tr>
                     )}
@@ -89,7 +89,7 @@ export class FetchData extends Component {
             },
             body: JSON.stringify({
                 id: id,
-                rocks: rocks
+                gemsToGive: rocks
             })
         })
     }

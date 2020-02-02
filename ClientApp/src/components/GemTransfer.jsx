@@ -20,7 +20,7 @@ export class GemTransfer extends Component {
 
     fromUserChangeHandler(event) {
         let index = event.target.value - 1;
-        this.setState({ fromUser: index, gemsToGive: this.state.users[index].rocks });
+        this.setState({ fromUser: index, gemsToGive: this.state.users[index].gemsToGive });
         console.log(this.state.gemsToGive); 
     }
 
@@ -38,17 +38,17 @@ export class GemTransfer extends Component {
         let user1 = this.state.users[fromIndex].name; 
         let user2 = this.state.users[toIndex].name;
 
-        let totalGems = this.state.users[fromIndex].rocks; 
+        let totalGemsToGive = this.state.users[fromIndex].gemsToGive; 
         let gemsToTransfer = this.state.gemsToTransfer; 
 
-        if (gemsToTransfer > totalGems) {
+        if (gemsToTransfer > totalGemsToGive) {
             alert(user1 + ' does not have enough gems to give. ')
         }
         else {
             alert(user1 + ' has transferred ' + gemsToTransfer + ' gems to ' + user2);
             let newUsers = this.state.users.slice(); 
-            newUsers[fromIndex].rocks -= gemsToTransfer; 
-            newUsers[toIndex].rocks += gemsToTransfer; 
+            newUsers[fromIndex].gemsToGive -= gemsToTransfer; 
+            newUsers[toIndex].totalGems += gemsToTransfer; 
             this.setState({ users: newUsers }); 
 
             let user1Url = baseUrl + (fromIndex + 1); 

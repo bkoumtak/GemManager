@@ -59,7 +59,7 @@ namespace GemManager.Controllers
         {
             var userFromDb = _userRepository.GetById(user.Id);
 
-            userFromDb.Rocks = user.Rocks;
+            userFromDb.GemsToGive = user.GemsToGive;
             
             _userRepository.Save(userFromDb);
             return Ok(user);

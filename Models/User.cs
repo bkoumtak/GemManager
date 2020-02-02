@@ -12,7 +12,8 @@ namespace GemManager.Models
         [BsonId]
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Rocks { get; set; }
+        public int GemsToGive { get; set; }
+        public int TotalGems { get; set; }
 
     }
 }
