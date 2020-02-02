@@ -57,7 +57,11 @@ namespace GemManager.Controllers
         [Route("{id:int}")]
         public ActionResult Put(User user)
         {
-            _userRepository.Save(user);
+            var userFromDb = _userRepository.GetById(user.Id);
+
+            userFromDb.Rocks = user.Rocks;
+            
+            _userRepository.Save(userFromDb);
             return Ok(user);
         }
     }
