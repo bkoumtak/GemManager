@@ -26,7 +26,7 @@ export class UserManagement extends Component {
             }, 
             body: JSON.stringify({
                 name: this.state.user,
-                rocks: 1
+                rocks: 10
             })
         })
     }
