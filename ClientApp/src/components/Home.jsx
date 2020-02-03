@@ -16,7 +16,6 @@ export class Home extends Component {
     }
 
     static renderUsers(users) {
-        console.log(users);
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -57,8 +56,6 @@ export class Home extends Component {
     async populateUsers() {
         const response = await fetch('api/user');
         const data = await response.json();
-
-        console.log(data);
 
         data.sort(this.totalGemsSort);
 
