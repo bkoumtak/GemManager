@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Role } from '../_helpers/role'; 
 
 export class UserManagement extends Component {
     static displayName = "User Management";
@@ -8,6 +9,7 @@ export class UserManagement extends Component {
         this.state = { user:'', users: [] };
         this.addUser = this.addUser.bind(this);
         this.handleChange = this.handleChange.bind(this); 
+        this.authenticate = this.authenticate.bind(this); 
     }
 
     handleChange(e) {
@@ -31,6 +33,22 @@ export class UserManagement extends Component {
         })
     }
 
+    authenticate() {
+        fetch('users/authenticate', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: this.state.user,
+                rocks: 10
+            })
+        }).then(
+            res => console.log(res.text().then(text => console.log(JSON.parse(text))))
+        ); 
+    }
+
     
     render() {
         let users = this.state.users.slice(); 
@@ -48,7 +66,15 @@ export class UserManagement extends Component {
                 </div>
 
                 <div className="pt-2">
+                    <button className="btn btn-primary" onClick={this.authenticate}>Authenticate</button>
+                </div>
+
+                <div className="pt-2">
                     <ul> {listOfUsers} </ul>
+                </div>
+
+                <div> 
+                    {Role.Admin}
                 </div>
             </div>
         );
