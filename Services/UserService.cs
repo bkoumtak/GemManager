@@ -40,6 +40,7 @@ namespace GemManager.Services
             // return null if user not found
             if (user == null)
                 return null;
+
             IdentityModelEventSource.ShowPII = true;
 
             // authentication successful so generate jwt token
