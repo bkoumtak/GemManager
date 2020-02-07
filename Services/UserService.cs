@@ -7,6 +7,7 @@ using System.Text;
 using GemManager.Helpers;
 using GemManager.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GemManager.Services
@@ -39,6 +40,7 @@ namespace GemManager.Services
             // return null if user not found
             if (user == null)
                 return null;
+            IdentityModelEventSource.ShowPII = true;
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();

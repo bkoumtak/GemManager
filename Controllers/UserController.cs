@@ -29,7 +29,7 @@ namespace GemManager.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("auth")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);
