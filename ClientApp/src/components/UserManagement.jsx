@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-export class FetchData extends Component {
-    static displayName = FetchData.name;
+export class UserManagement extends Component {
+    static displayName = UserManagement.name;
 
     constructor(props) {
         super(props);
@@ -62,7 +62,7 @@ export class FetchData extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : FetchData.renderUsers(this.state.users, this.state.addOrSubstractRocks);
+            : UserManagement.renderUsers(this.state.users, this.state.addOrSubstractRocks);
 
         return (
             <div>

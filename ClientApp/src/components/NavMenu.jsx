@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { authenticationService } from '../_services/authentication.service'; 
+import { Role } from '../_helpers/role'; 
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
@@ -11,17 +13,31 @@ export class NavMenu extends Component {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true
+        collapsed: true,
+        currentUser: null, 
+        isAdmin: false
     };
-  }
+    }
+
+    componentDidMount() {
+        authenticationService.currentUser.subscribe(x => this.setState({
+            currentUser: x,
+            isAdmin: x && x.role === Role.Admin
+        }));
+    }
 
   toggleNavbar () {
     this.setState({
       collapsed: !this.state.collapsed
     });
+   }
+
+    logout() {
+        authenticationService.logout(); 
   }
 
-  render () {
+    render() {
+        const { currentUser, isAdmin } = this.state; 
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
@@ -32,16 +48,20 @@ export class NavMenu extends Component {
               <ul className="navbar-nav flex-grow">
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                </NavItem>
+                            </NavItem>
+                            {currentUser && <a onClick={this.logout} className="nav-item nav-link">Logout</a>}
+                {isAdmin &&
+                    <NavItem>
+                        <NavLink tag={Link} className="text-dark" to="/user-management">User Management</NavLink>
+                    </NavItem>
+                }
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/counter">User Management</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/add-user">Add User</NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/gem-transfer">Gem Transfer</NavLink>
-                </NavItem>
+                            </NavItem>
+                            
               </ul>
             </Collapse>
           </Container>
