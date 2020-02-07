@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Role } from '../_helpers/role'; 
+import { authenticationService } from '../_services/authentication.service'
 
 export class UserManagement extends Component {
     static displayName = "User Management";
@@ -34,19 +35,9 @@ export class UserManagement extends Component {
     }
 
     authenticate() {
-        fetch('users/authenticate', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: this.state.user,
-                rocks: 10
-            })
-        }).then(
-            res => console.log(res.text().then(text => console.log(JSON.parse(text))))
-        ); 
+        authenticationService.login('bkoumtak', 'bkoumtak').then(
+            user => console.log(user)
+        )
     }
 
     

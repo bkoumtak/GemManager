@@ -1,4 +1,5 @@
 ﻿import { BehaviorSubject } from 'rxjs'; 
+import { handleResponse } from '../_helpers/handle-response';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -17,8 +18,10 @@ function login(username, password) {
     }; 
 
     return fetch('/users/authenticate', requestOptions)
+        .then(handleResponse)
         .then(user => {
             localStorage.setItem('currentUser', JSON.stringify(user)); 
+            currentUserSubject.next(user); 
 
             return user; 
         });

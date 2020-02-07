@@ -2,8 +2,8 @@
 
 export function configureFakeBackend() {
     let users = [
-        { id: 1, username: 'admin', password: 'admin', firstName: 'Admin', lastName: 'User', role: Role.Admin },
-        { id: 2, username: 'user', password: 'user', firstName: 'Normal', lastName: 'User', role: Role.User }
+        { id: 1, username: 'bkoumtak', password: 'bkoumtak', firstName: 'Ace', lastName: 'Koumtakoun', role: Role.Admin },
+        { id: 2, username: 'hauche', password: 'hauche', firstName: 'Hau', lastName: 'Gilles Che', role: Role.User }
     ];
 
     let realFetch = window.fetch; 
@@ -16,9 +16,16 @@ export function configureFakeBackend() {
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
                 if (url.endsWith('users/authenticate')) {
-                    console.log('ehhh'); 
+                    const params = JSON.parse(opts.body); 
+                    const user = users.find(x => x.username === params.username && x.password === params.password); 
+                    if (!user) return error('Username or password is incorrect'); 
                     return ok({
-                        name: 'bob'
+                        id: user.id,
+                        username: user.username,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        role: user.role,
+                        token: `fake-jwt-token.${user.role}`
                     }); 
                 }
 
@@ -28,6 +35,10 @@ export function configureFakeBackend() {
                 function ok(body) {
                     resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(body)) })
                     //resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(body)) })
+                }
+
+                function error(message) {
+                    resolve({ status: 400, text: () => Promise.resolve(JSON.stringify({ message })) })
                 }
             }, 500); 
         })
