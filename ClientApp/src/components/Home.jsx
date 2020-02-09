@@ -9,6 +9,7 @@ export class Home extends Component {
             users: [],
             loading: true
         };
+        this.totalGemsSort = this.totalGemsSort.bind(this); 
     }
 
     componentDidMount() {
@@ -54,16 +55,27 @@ export class Home extends Component {
 
 
     async populateUsers() {
-        const response = await fetch('api/user');
+        const response = await fetch('api/user', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }); 
         const data = await response.json();
 
-        data.sort(this.totalGemsSort);
+        var sortable = []; 
+        for (var obj in data) {
+            sortable.push(data[obj]); 
+        }
+
+        sortable.sort(this.totalGemsSort); 
 
         if (data.length > 0)
-            this.setState({ users: data, loading: false });
+            this.setState({ users: sortable, loading: false });
     }
 
-    static totalGemsSort(a, b) {
+    totalGemsSort(a, b) {
         if (a.totalGems > b.totalGems) return -1;
         if (a.totalGems < b.totalGems) return 1;
         return 0;

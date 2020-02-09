@@ -16,21 +16,32 @@ export function configureFakeBackend() {
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
                 if (url.endsWith('users/authenticate')) {
-                    const params = JSON.parse(opts.body); 
-                    const user = users.find(x => x.username === params.username && x.password === params.password); 
-                    if (!user) return error('Username or password is incorrect'); 
-                    return ok({
-                        id: user.id,
-                        username: user.username,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        role: user.role,
-                        token: `fake-jwt-token.${user.role}`
-                    }); 
-                }
+                    const params = JSON.parse(opts.body);
+                    const user = users.find(x => x.username === params.username && x.password === params.password);
+                    if (!user) return error('Username or password is incorrect');
 
-                console.log('hmmm'); 
-                realFetch(url, opts).then(response => resolve(response)); 
+                    realFetch('api/user/' + user.id, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        }
+                    }).then(res => res.json()).then(data => {
+                        return ok({
+                            id: user.id,
+                            username: user.username,
+                            lastName: user.lastName,
+                            role: user.role,
+                            token: `fake-jwt-token.${user.role}`,
+                            ...data
+                        })
+                    });
+                }
+                else {
+                    console.log('hmmm');
+                    realFetch(url, opts).then(response => resolve(response)); 
+                }
+                
 
                 function ok(body) {
                     resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(body)) })

@@ -14,6 +14,5 @@ namespace GemManager.Models
         public string Name { get; set; }
         public int GemsToGive { get; set; }
         public int TotalGems { get; set; }
-
     }
 }
