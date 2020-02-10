@@ -4,22 +4,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using GemManager.Models;
 using GemManager.Repositories;
+using GemManager.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace GemManager.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
         private readonly IRepository<User> _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository)
+
+        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IUserService userService)
         {
             _logger = logger;
             _userRepository = userRepository;
+            _userService = userService;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("auth")]
+        public IActionResult Authenticate([FromBody]AuthenticateModel model)
+        {
+            var user = _userService.Authenticate(model.Username, model.Password);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(user);
         }
 
         [HttpGet]
