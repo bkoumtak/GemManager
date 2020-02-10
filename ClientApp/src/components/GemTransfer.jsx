@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 
+
 export class GemTransfer extends Component {
     
     constructor(props) {
@@ -129,7 +130,13 @@ export class GemTransfer extends Component {
     }
 
     async populateUsers() {
-        const response = await fetch('api/user'); 
+        const response = await fetch('api/user', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }); 
         const data = await response.json(); 
         if (data.length > 0) 
             this.setState({ users: data, loading: false });

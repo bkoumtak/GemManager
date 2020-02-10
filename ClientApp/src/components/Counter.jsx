@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { Role } from '../_helpers/role'; 
+import { authenticationService } from '../_services/authentication.service'
 
-export class UserManagement extends Component {
-    static displayName = "User Management";
+export class AddUser extends Component {
+    static displayName = "Add User";
 
     constructor(props) {
         super(props);
-        this.state = { user:'', users: [] };
+        this.state = { user:'', username:'', password: '', users: [] };
         this.addUser = this.addUser.bind(this);
         this.handleChange = this.handleChange.bind(this); 
     }
@@ -31,7 +33,6 @@ export class UserManagement extends Component {
         })
     }
 
-    
     render() {
         let users = this.state.users.slice(); 
         const listOfUsers = users.map((user, index) =>
@@ -42,8 +43,10 @@ export class UserManagement extends Component {
 
         return (
             <div>
-            <input type="text" onChange={this.handleChange}/>
-                <div className="pt-2">
+                <h6> Add User </h6>
+                <input type="text" onChange={this.handleChange} />
+
+                <div>
                 <button className="btn btn-primary" onClick={this.addUser}>Add User</button>
                 </div>
 

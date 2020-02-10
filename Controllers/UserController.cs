@@ -78,6 +78,7 @@ namespace GemManager.Controllers
             var userFromDb = _userRepository.GetById(user.Id);
 
             userFromDb.GemsToGive = user.GemsToGive;
+            userFromDb.TotalGems = user.TotalGems;
             
             _userRepository.Save(userFromDb);
             return Ok(user);
