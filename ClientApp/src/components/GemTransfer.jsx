@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-
+import { authHeader, handleResponse } from '../_helpers';
 
 export class GemTransfer extends Component {
     
@@ -61,8 +61,11 @@ export class GemTransfer extends Component {
             fetch(user1Url, {
                 method: 'PUT',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    ...{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
                 },
                 body: JSON.stringify(newUsers[fromIndex])
             }); 
@@ -70,8 +73,11 @@ export class GemTransfer extends Component {
             fetch(user2Url, {
                 method: 'PUT',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    ...{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
                 },
                 body: JSON.stringify(newUsers[toIndex])
             }); 
@@ -133,9 +139,12 @@ export class GemTransfer extends Component {
         const response = await fetch('api/user', {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
+            },
         }); 
         const data = await response.json(); 
         if (data.length > 0) 

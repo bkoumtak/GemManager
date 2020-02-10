@@ -45,7 +45,7 @@ export class Home extends Component {
     render() {
         let contents;
         if (!authenticationService.currentUserValue) {
-            contents = <p><em>You're not logged into the webiste...</em></p>
+            contents = <p><em>You're not logged in to the webiste...</em></p>
         } else {
             contents = this.state.loading
                         ? <p><em>Loading...</em></p>
