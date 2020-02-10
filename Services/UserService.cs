@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using GemManager.Helpers;
 using GemManager.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +24,7 @@ namespace GemManager.Services
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
         private List<User> _users = new List<User>
             {
-                new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
+                new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test", Role = "Admin"}
             };
 
         private readonly AppSettings _appSettings;

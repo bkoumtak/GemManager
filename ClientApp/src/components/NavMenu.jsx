@@ -61,17 +61,24 @@ export class NavMenu extends Component {
                 {currentUser &&
                     <>
                         {isAdmin &&
-                            <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/user-management">User Management</NavLink>
-                            </NavItem>
+                            <>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/user-management">
+                                        User Management
+                                     </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/add-user">
+                                            Add User
+                                        </NavLink>
+                                </NavItem>
+                            </>
                         }
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/add-user">Add User</NavLink>
-                        </NavItem>
-
                         {isUser &&
                             <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/gem-transfer">Gem Transfer</NavLink>
+                                <NavLink tag={Link} className="text-dark" to="/gem-transfer">
+                                    Gem Transfer
+                                </NavLink>
                             </NavItem>
                         }
                         <a onClick={this.logout} className="nav-item nav-link">Logout</a>

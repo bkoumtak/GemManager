@@ -22,7 +22,7 @@ export default class App extends Component {
             <Route path='/login' component={LoginPage} />
             <PrivateRoute path='/user-management' roles={[Role.Admin]} component={UserManagement} />
             <PrivateRoute path='/add-user' roles={[Role.Admin]} component={AddUser} />
-            <PrivateRoute path='/gem-transfer' roles={[Role.User]}component={GemTransfer} />
+            <PrivateRoute path='/gem-transfer' roles={[Role.User]} component={GemTransfer} />
           </Layout>
       </>
     );
