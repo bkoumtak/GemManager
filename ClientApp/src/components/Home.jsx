@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { authHeader, handleResponse } from '../_helpers';
+import { authenticationService } from '../_services/authentication.service'
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -13,7 +15,8 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        this.populateUsers();
+        if (authenticationService.currentUserValue)
+            this.populateUsers();
     }
 
     static renderUsers(users) {
@@ -40,9 +43,14 @@ export class Home extends Component {
     }
 
     render() {
-        let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : Home.renderUsers(this.state.users);
+        let contents;
+        if (!authenticationService.currentUserValue) {
+            contents = <p><em>You're not logged in to the webiste...</em></p>
+        } else {
+            contents = this.state.loading
+                        ? <p><em>Loading...</em></p>
+                        : Home.renderUsers(this.state.users);
+        }        
 
         return (
             <div>
@@ -55,23 +63,20 @@ export class Home extends Component {
 
 
     async populateUsers() {
-        const response = await fetch('api/user', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }); 
-        const data = await response.json();
-
+        const response = await fetch('api/user',
+            {
+                method: 'GET',
+                headers: authHeader()
+            }).then(handleResponse);
+        
         var sortable = []; 
-        for (var obj in data) {
-            sortable.push(data[obj]); 
+        for (var obj in response) {
+            sortable.push(response[obj]); 
         }
 
         sortable.sort(this.totalGemsSort); 
 
-        if (data.length > 0)
+        if (response.length > 0)
             this.setState({ users: sortable, loading: false });
     }
 

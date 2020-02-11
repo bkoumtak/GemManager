@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Role } from '../_helpers/role'; 
+import { authHeader, handleResponse } from '../_helpers';
 import { authenticationService } from '../_services/authentication.service'
 
 export class AddUser extends Component {
@@ -23,8 +24,11 @@ export class AddUser extends Component {
         fetch('api/user/', {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                    ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
             }, 
             body: JSON.stringify({
                 name: this.state.user,

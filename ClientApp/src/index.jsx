@@ -10,7 +10,7 @@ import { history } from './_helpers/history';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
-configureFakeBackend(); 
+//configureFakeBackend(); 
 
 ReactDOM.render(
   <Router basename={baseUrl} history={history}>

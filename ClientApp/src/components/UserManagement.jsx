@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { authHeader, handleResponse } from '../_helpers';
 
 export class UserManagement extends Component {
     static displayName = UserManagement.name;
@@ -66,8 +67,7 @@ export class UserManagement extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel" >User Management</h1>
-                <p>This component demonstrates fetching data from the server.</p>
+                <h1 id="tabelLabel">User Management</h1>
                 {contents}
             </div>
         );
@@ -77,8 +77,11 @@ export class UserManagement extends Component {
         const response = await fetch('api/user', {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
             }
         });
         const data = await response.json();

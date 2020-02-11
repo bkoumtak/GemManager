@@ -17,7 +17,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     }; 
 
-    return fetch('/users/authenticate', requestOptions)
+    return fetch('api/user/auth', requestOptions)
         .then(handleResponse)
         .then(user => {
             localStorage.setItem('currentUser', JSON.stringify(user)); 
