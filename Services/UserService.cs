@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -36,30 +37,49 @@ namespace GemManager.Services
 
         public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            //var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
-            // return null if user not found
-            if (user == null)
-                return null;
-
-            IdentityModelEventSource.ShowPII = true;
-
-            // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            //// return null if user not found
+            //if (user == null)
+            //    return null;
+            using (var adContext = new PrincipalContext(ContextType.Domain, "genetec.com"))
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+                var result = adContext.ValidateCredentials(username, password, ContextOptions.Signing);
 
-            return user.WithoutPassword();
+                if (result)
+                {
+                    GetAll();
+
+                    UserPrincipal u = UserPrincipal.FindByIdentity(adContext, username);
+                    IdentityModelEventSource.ShowPII = true;
+
+                    // authentication successful so generate jwt token
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim(ClaimTypes.Name, username)
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                            SecurityAlgorithms.HmacSha256Signature),
+                        Issuer = "genetec.com",
+                        Audience = "genetec.com"
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+
+                    var user = new User()
+                    {
+                        Token = tokenHandler.WriteToken(token)
+                    };
+
+                    return user.WithoutPassword();
+                }
+
+                return null;
+            }
         }
 
         public IEnumerable<User> GetAll()
