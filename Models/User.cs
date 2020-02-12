@@ -6,7 +6,7 @@ using LiteDB;
 
 namespace GemManager.Models
 {
-    [CollectionName("user")]
+    [CollectionName(DbCollectionName.User)]
     public class User : IDocument
     {
         [BsonId]
@@ -20,5 +20,7 @@ namespace GemManager.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
+        [BsonRef(DbCollectionName.Gem)]
+        public List<Gem> Gems { get; set; }
     }
 }
