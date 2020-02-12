@@ -9,7 +9,7 @@ namespace GemManager
     public interface IDocument
     {
         [BsonId]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }
 

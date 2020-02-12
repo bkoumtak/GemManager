@@ -9,12 +9,12 @@ namespace GemManager.Repositories
     {
         IEnumerable<T> GetAll();
 
-        T GetById(int id);
+        T GetById(Guid id);
 
         void Save(T document);
 
         void Save(IEnumerable<T> document);
 
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }
