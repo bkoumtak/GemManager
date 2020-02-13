@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using GemManager.Helpers;
 using GemManager.Models;
 using GemManager.Repositories;
-using GemManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GemManager.Controllers
 {
@@ -18,26 +25,70 @@ namespace GemManager.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IRepository<User> _userRepository;
-        private readonly IUserService _userService;
+        private readonly AppSettings _appSettings;
 
-
-        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IUserService userService)
+        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _userRepository = userRepository;
-            _userService = userService;
+            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
         [HttpPost("auth")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            using (var adContext = new PrincipalContext(ContextType.Domain, "genetec.com"))
+            {
+                var result = adContext.ValidateCredentials(model.Username, model.Password, ContextOptions.Signing);
+                User user;
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                if (result)
+                {
+                    var usersFromDb = _userRepository.GetAll();
+                    UserPrincipal userFromAd = UserPrincipal.FindByIdentity(adContext, model.Username);
+                    user = usersFromDb.SingleOrDefault(x => x.Id == userFromAd?.Guid);
 
-            return Ok(user);
+                    if (user == null)
+                    {
+                        user = new User()
+                        {
+                            Id = userFromAd.Guid.GetValueOrDefault(),
+                            FirstName = userFromAd.GivenName,
+                            LastName = userFromAd.Surname,
+                            Name = userFromAd.Name,
+                            Username = userFromAd.SamAccountName,
+                            Role = "User"
+                        };
+
+                        _userRepository.Save(user);
+                    }
+
+                    IdentityModelEventSource.ShowPII = true;
+
+                    // authentication successful so generate jwt token
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim(ClaimTypes.Name, model.Username)
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                            SecurityAlgorithms.HmacSha256Signature),
+                        Issuer = "genetec.com",
+                        Audience = "genetec.com"
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+
+                    user.Token = tokenHandler.WriteToken(token);
+                    
+                    return Ok(user);
+                }
+            }
+            return BadRequest(new { message = "Username or password is incorrect" });
         }
 
         [HttpGet]
@@ -48,8 +99,8 @@ namespace GemManager.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public ActionResult Get(int id)
+        [Route("{id:guid}")]
+        public ActionResult Get(Guid id)
         {
             var user = _userRepository.GetById(id);
             return Ok(user);
@@ -64,15 +115,15 @@ namespace GemManager.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public ActionResult Delete(int id)
+        [Route("{id:guid}")]
+        public ActionResult Delete(Guid id)
         {
             _userRepository.Delete(id);
             return NoContent();
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:guid}")]
         public ActionResult Put(User user)
         {
             var userFromDb = _userRepository.GetById(user.Id);

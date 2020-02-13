@@ -20,26 +20,26 @@ export class GemTransfer extends Component {
     }
 
     fromUserChangeHandler(event) {
-        let index = event.target.value - 1;
-        this.setState({ fromUser: index, gemsToGive: this.state.users[index].gemsToGive });
+        let id = event.target.value;
+        this.setState({ fromUser: id, gemsToGive: this.state.users.find(x => x.id == id).gemsToGive });
         console.log(this.state.gemsToGive); 
     }
 
     toUserChangeHandler(event) {
         //console.log('to called'); 
-        this.setState({ toUser: event.target.value - 1 });
+        this.setState({ toUser: event.target.value });
     }
 
     transferGem(event) {
         const baseUrl = 'api/user/'; 
 
-        let fromIndex = this.state.fromUser; 
-        let toIndex = this.state.toUser;
+        let fromId = this.state.fromUser; 
+        let toId = this.state.toUser;
 
-        let user1 = this.state.users[fromIndex].name; 
-        let user2 = this.state.users[toIndex].name;
+        let user1 = this.state.users.find(x => x.id == fromId).name; 
+        let user2 = this.state.users.find(x => x.id == toId).name;
 
-        let totalGemsToGive = this.state.users[fromIndex].gemsToGive; 
+        let totalGemsToGive = this.state.users.find(x => x.id == fromId).gemsToGive; 
         let gemsToTransfer = this.state.gemsToTransfer; 
 
         if (gemsToTransfer > totalGemsToGive) {
@@ -48,16 +48,13 @@ export class GemTransfer extends Component {
         else {
             alert(user1 + ' has transferred ' + gemsToTransfer + ' gems to ' + user2);
             let newUsers = this.state.users.slice(); 
-            newUsers[fromIndex].gemsToGive -= gemsToTransfer; 
-            newUsers[toIndex].totalGems += gemsToTransfer; 
+            newUsers.find(x => x.id == fromId).gemsToGive -= gemsToTransfer; 
+            newUsers.find(x => x.id == toId).totalGems += gemsToTransfer; 
             this.setState({ users: newUsers }); 
 
-            let user1Url = baseUrl + (fromIndex + 1); 
-            let user2Url = baseUrl + (toIndex + 1); 
-
-            console.log(newUsers[fromIndex]); 
-            console.log(newUsers[toIndex]); 
-           
+            let user1Url = baseUrl + fromId; 
+            let user2Url = baseUrl + toId; 
+            
             fetch(user1Url, {
                 method: 'PUT',
                 headers: {
@@ -67,7 +64,7 @@ export class GemTransfer extends Component {
                     },
                     ...authHeader()
                 },
-                body: JSON.stringify(newUsers[fromIndex])
+                body: JSON.stringify(newUsers.find(x => x.id == fromId))
             }); 
 
             fetch(user2Url, {
@@ -79,7 +76,7 @@ export class GemTransfer extends Component {
                     },
                     ...authHeader()
                 },
-                body: JSON.stringify(newUsers[toIndex])
+                body: JSON.stringify(newUsers.find(x => x.id == toId))
             }); 
 
         }

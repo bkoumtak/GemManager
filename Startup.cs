@@ -1,7 +1,6 @@
 using System.Text;
 using GemManager.Helpers;
 using GemManager.Repositories;
-using GemManager.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,9 +59,6 @@ namespace GemManager
             });
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
-            // configure DI for application services
-            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
