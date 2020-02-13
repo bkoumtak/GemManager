@@ -99,7 +99,7 @@ namespace GemManager.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:guid}")]
         public ActionResult Get(Guid id)
         {
             var user = _userRepository.GetById(id);
@@ -115,7 +115,7 @@ namespace GemManager.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:guid}")]
         public ActionResult Delete(Guid id)
         {
             _userRepository.Delete(id);
@@ -123,7 +123,7 @@ namespace GemManager.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:guid}")]
         public ActionResult Put(User user)
         {
             var userFromDb = _userRepository.GetById(user.Id);
