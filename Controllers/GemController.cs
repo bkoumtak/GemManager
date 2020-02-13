@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using GemManager.Models;
 using GemManager.Repositories;
 
@@ -13,9 +8,9 @@ namespace GemManager.Controllers
     [ApiController]
     public class GemController : ControllerBase
     {
-        private readonly IRepository<Gem> _gemRepository;
+        private readonly IGemRepository _gemRepository;
 
-        public GemController(IRepository<Gem> gemRepository)
+        public GemController(IGemRepository gemRepository)
         {
             _gemRepository = gemRepository;
         }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using LiteDB;
 
 namespace GemManager.Models
@@ -10,7 +7,7 @@ namespace GemManager.Models
     public class Gem : IDocument
     { 
         [BsonId]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [BsonRef(DbCollectionName.User)]
         public User From { get; set; }
         [BsonRef(DbCollectionName.User)]
