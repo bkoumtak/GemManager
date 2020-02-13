@@ -23,7 +23,7 @@ namespace GemManager.Repositories
             return GetLiteCollection().FindAll();
         }
 
-        public virtual T GetById(int id)
+        public virtual T GetById(Guid id)
         {
             return GetLiteCollection().FindOne(d => d.Id == id);
         }
@@ -51,7 +51,7 @@ namespace GemManager.Repositories
             }
         }
 
-        public virtual void Delete(int id)
+        public virtual void Delete(Guid id)
         {
             GetLiteCollection().Delete(p => p.Id == id);
         }

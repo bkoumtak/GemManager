@@ -16,6 +16,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.7.0" />
+
   </ItemGroup>
 
   <ItemGroup>
