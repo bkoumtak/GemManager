@@ -98,6 +98,7 @@ namespace GemManager.Controllers
             return Ok(users);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("{id:guid}")]
         public ActionResult Get(Guid id)
@@ -106,7 +107,7 @@ namespace GemManager.Controllers
             return Ok(user);
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Post(User users)
         {
@@ -122,6 +123,7 @@ namespace GemManager.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPut]
         [Route("{id:guid}")]
         public ActionResult Put(User user)
@@ -131,7 +133,7 @@ namespace GemManager.Controllers
             userFromDb.GemsToGive = user.GemsToGive;
             userFromDb.TotalGems = user.TotalGems;
             
-            _userRepository.Save(userFromDb);
+            _userRepository.Save(user);
             return Ok(user);
         }
     }
