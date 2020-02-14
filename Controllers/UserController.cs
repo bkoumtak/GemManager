@@ -131,8 +131,8 @@ namespace GemManager.Controllers
             userFromDb.GemsToGive = user.GemsToGive;
             userFromDb.TotalGems = user.TotalGems;
             
-            _userRepository.Save(user);
-            return Ok(user);
+            _userRepository.Save(userFromDb);
+            return Ok(userFromDb);
         }
     }
 }

@@ -5,6 +5,8 @@ import { Role } from '../_helpers/role';
 import { history } from '../_helpers/history';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Dropdown } from 'react-bootstrap';
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -44,21 +46,21 @@ export class NavMenu extends Component {
         const { currentUser, isAdmin, isUser } = this.state; 
     return (
       <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
-          <Container>
-            <NavbarBrand tag={Link} to="/">GemManager</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-              <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                </NavItem>
-                {!currentUser && 
+          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+              <Container>
+                  <NavbarBrand tag={Link} to="/">GemManager</NavbarBrand>
+                  <NavbarToggler onClick={this.toggleNavbar} className="mr-2"/>
+                  <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+                      <ul className="navbar-nav flex-grow">
+                          <NavItem>
+                              <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                          </NavItem>
+                          {!currentUser && 
                         <NavItem>
                             <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
                         </NavItem>
                 }
-                {currentUser &&
+                          {currentUser &&
                     <>
                         {isAdmin &&
                             <>
@@ -74,20 +76,25 @@ export class NavMenu extends Component {
                                 </NavItem>
                             </>
                         }
-                        {isUser &&
-                            <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/gem-transfer">
-                                    Gem Transfer
-                                </NavLink>
-                            </NavItem>
-                        }
-                        <a onClick={this.logout} className="nav-item nav-link">Logout</a>
+                        <NavItem>
+                            <NavLink tag={Link} className="text-dark" to="/gem-transfer">
+                                Gem Transfer
+                            </NavLink>
+                        </NavItem>
+                        <Dropdown>
+                          <Dropdown.Toggle variant="success" id="dropdown-basic">
+                              {currentUser.username}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                              <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                     </>
                 }
-              </ul>
-            </Collapse>
-          </Container>
-        </Navbar>
+                      </ul>
+                  </Collapse>
+              </Container>
+          </Navbar>
       </header>
     );
   }
