@@ -5,6 +5,7 @@ import { Role } from '../_helpers/role';
 import { history } from '../_helpers/history';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import { UserPage } from './UserPage';
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -53,9 +54,12 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} className="text-dark" to="/user-page">User Page</NavLink>
+                </NavItem>
                 {!currentUser && 
                         <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                            <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
                         </NavItem>
                 }
                 {currentUser &&
@@ -83,7 +87,8 @@ export class NavMenu extends Component {
                         }
                         <a onClick={this.logout} className="nav-item nav-link">Logout</a>
                     </>
-                }
+                            }
+                            
               </ul>
             </Collapse>
           </Container>
