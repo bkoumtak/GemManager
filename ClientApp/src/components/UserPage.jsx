@@ -1,4 +1,5 @@
 ﻿import React from 'react'; 
+import { v4 as uuidv4 } from 'uuid'; 
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -47,14 +48,26 @@ export class UserPage extends React.Component {
             currentUser: currentUser
         })
 
-        await fetch('api/gem', {
+        let toUser = this.state.users[this.state.toUserIndex]; 
+        let guid = uuidv4(); 
+        console.log(uuidv4());
+        console.log(currentUser.id); 
+        console.log(toUser.id); 
+       fetch('api/gem', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                
+           body: JSON.stringify({
+               id: guid,
+               from: {
+                   id: currentUser.id
+               },
+               to: {
+                   id: toUser.id
+               },
+               message: this.state.currentTextMessage
             })
         });
     }
