@@ -54,15 +54,6 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                 </NavItem>
-                <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/user-page">User Page</NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/gems-received-page">Gems Received</NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/gems-sent-page">Gems Sent</NavLink>
-                </NavItem>
                 {!currentUser && 
                         <NavItem>
                             <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
@@ -77,23 +68,30 @@ export class NavMenu extends Component {
                                         User Management
                                      </NavLink>
                                 </NavItem>
-                                <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/add-user">
-                                            Add User
-                                        </NavLink>
-                                </NavItem>
                             </>
                         }
                         {isUser &&
-                            <NavItem>
-                                <NavLink tag={Link} className="text-dark" to="/gem-transfer">
-                                    Gem Transfer
-                                </NavLink>
-                            </NavItem>
+                            <>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/user-page">
+                                        Send Gem
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/gems-received-page">
+                                        Gems Received
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
+                                        Gems Sent
+                                    </NavLink>
+                                </NavItem>
+                            </>
                         }
                         <a onClick={this.logout} className="nav-item nav-link">Logout</a>
                     </>
-                            }
+                }
                             
               </ul>
             </Collapse>

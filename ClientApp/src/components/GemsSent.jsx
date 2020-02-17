@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { authenticationService } from '../_services/authentication.service'; 
 
 export class GemsSent extends React.Component {
     constructor(props) {
@@ -14,8 +15,10 @@ export class GemsSent extends React.Component {
     }
 
     renderGems() {
+        let currentUser = authenticationService.currentUserValue;
+
         var list = this.state.gems.map(gem => {
-            if (gem.from.id == "13e9a6d2-61f6-4071-804e-f25923e49c79") {
+            if (gem.from.id == currentUser.id) {
                 let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
                     <div className="card-header">
                         You sent a gem to {gem.to.firstName} {gem.to.lastName} !

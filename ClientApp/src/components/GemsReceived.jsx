@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { authenticationService } from '../_services/authentication.service'; 
 
 export class GemsReceived extends React.Component {
     constructor(props) {
@@ -14,8 +15,10 @@ export class GemsReceived extends React.Component {
     }
 
     renderRocks() {
+        let currentUser = authenticationService.currentUserValue;
+
         var list = this.state.gems.map(gem => {
-            if (gem.to.id == "13e9a6d2-61f6-4071-804e-f25923e49c79") {
+            if (gem.to.id == currentUser.id) {
                 let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
                     <div className="card-header">
                         You got a gem from {gem.from.firstName} {gem.from.lastName} !

@@ -1,5 +1,6 @@
 ﻿import React from 'react'; 
 import { v4 as uuidv4 } from 'uuid'; 
+import { authenticationService } from '../_services/authentication.service'; 
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -141,8 +142,11 @@ export class UserPage extends React.Component {
 
         // This code would be removed to take into account the current user returned
         if (data.length > 0) {
+            let user = authenticationService.currentUserValue;
+            let initialIndex = user.Id == data[0].Id ? 0 : 1;
+
             this.setState({
-                currentUser: data[0], users: data, loading: false
+                currentUser: user, users: data, loading: false, toUserIndex: initialIndex
             });
         }
     }
