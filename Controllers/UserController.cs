@@ -89,10 +89,12 @@ namespace GemManager.Controllers
             return BadRequest(new { message = "Username or password is incorrect" });
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Get()
         {
             var users = _userRepository.GetAll();
+            
             return Ok(users);
         }
 
@@ -134,5 +136,7 @@ namespace GemManager.Controllers
             _userRepository.Save(userFromDb);
             return Ok(userFromDb);
         }
+
+
     }
 }

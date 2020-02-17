@@ -5,6 +5,7 @@ import { Role } from '../_helpers/role';
 import { history } from '../_helpers/history';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import { UserPage } from './UserPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown } from 'react-bootstrap';
 
@@ -57,7 +58,7 @@ export class NavMenu extends Component {
                           </NavItem>
                           {!currentUser && 
                         <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                            <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
                         </NavItem>
                 }
                           {currentUser &&
@@ -69,18 +70,28 @@ export class NavMenu extends Component {
                                         User Management
                                      </NavLink>
                                 </NavItem>
+                            </>
+                        }
+                            
+                        {isUser &&
+                            <>
                                 <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/add-user">
-                                            Add User
-                                        </NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/user-page">
+                                        Send Gem
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/gems-received-page">
+                                        Gems Received
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
+                                        Gems Sent
+                                    </NavLink>
                                 </NavItem>
                             </>
                         }
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/gem-transfer">
-                                Gem Transfer
-                            </NavLink>
-                        </NavItem>
                         <Dropdown>
                           <Dropdown.Toggle variant="success" id="dropdown-basic">
                               {currentUser.username}
@@ -91,10 +102,11 @@ export class NavMenu extends Component {
                         </Dropdown>
                     </>
                 }
-                      </ul>
-                  </Collapse>
-              </Container>
-          </Navbar>
+                            
+              </ul>
+            </Collapse>
+          </Container>
+        </Navbar>
       </header>
     );
   }
