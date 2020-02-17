@@ -19,6 +19,9 @@ function login(username, password) {
 
     return fetch('api/user/auth', requestOptions)
         .then(handleResponse)
+        .catch((error) => {
+            alert(error);
+        })
         .then(user => {
             localStorage.setItem('currentUser', JSON.stringify(user)); 
             currentUserSubject.next(user); 

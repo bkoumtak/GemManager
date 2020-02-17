@@ -20,7 +20,7 @@ export default class App extends Component {
     render() {
       return (
       <>
-           <Layout>
+          <Layout>
             <Route exact path='/' component={Home} />
             <Route path='/login' component={LoginPage} />
             <PrivateRoute path='/user-page' roles={[Role.User]} component={UserPage} />
