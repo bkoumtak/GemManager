@@ -12,3 +12,17 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.rounded-bottom {
+    border-bottom-right-radius: .50rem !important;
+    border-bottom-left-radius: .50rem !important;
+}
+
+.h1, h1 {
+    font-size: 1.5rem;
+}
+
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 90%;
+    padding: 1rem;
+}
