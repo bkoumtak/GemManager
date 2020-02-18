@@ -26,3 +26,7 @@ code {
     max-width: 90%;
     padding: 1rem;
 }
+
+.btn {
+    margin-left: 10px;
+}

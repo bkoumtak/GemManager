@@ -55,18 +55,10 @@ export class NavMenu extends Component {
                     <ul className="navbar-nav flex-grow col-4">
                         {currentUser &&
                         <>
-                        {isAdmin &&
-                                    <>
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/user-management">
-                                                User Management
-                                     </NavLink>
-                                        </NavItem>
-                                    </>
-                                }
+                        
 
-                        {isUser &&
-                                    <>
+                        
+                                   
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark" to="/user-page">
                                                 Send Gem
@@ -82,8 +74,8 @@ export class NavMenu extends Component {
                                                 Gems Sent
                                     </NavLink>
                                         </NavItem>
-                                    </>
-                            }
+                                    
+                         
                             </>
                          }
                     </ul>
@@ -99,7 +91,15 @@ export class NavMenu extends Component {
                 }
                           {currentUser &&
                     <>
-                        
+{isAdmin &&
+                                    <>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/user-management">
+                                                User Management
+                                     </NavLink>
+                                        </NavItem>
+                                    </>
+                                }
                         <Dropdown>
                           <Dropdown.Toggle variant="success" id="dropdown-basic">
                               {currentUser.username}
