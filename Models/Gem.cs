@@ -8,10 +8,13 @@ namespace GemManager.Models
     { 
         [BsonId]
         public Guid Id { get; set; }
+        public int Week { get; set; }
+
         [BsonRef(DbCollectionName.User)]
         public User From { get; set; }
         [BsonRef(DbCollectionName.User)]
         public User To { get; set; }
         public string Message { get; set; }
+       
     }
 }
