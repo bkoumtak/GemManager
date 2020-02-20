@@ -23,9 +23,9 @@ export default class App extends Component {
           <Layout>
             <Route exact path='/' component={Home} />
             <Route path='/login' component={LoginPage} />
-            <PrivateRoute path='/user-page' roles={[Role.User]} component={UserPage} />
-            <PrivateRoute path='/gems-received-page' roles={[Role.User]} component={GemsReceived} />
-            <PrivateRoute path='/gems-sent-page' roles={[Role.User]} component={GemsSent} />
+            <PrivateRoute path='/user-page' component={UserPage} />
+            <PrivateRoute path='/gems-received-page' component={GemsReceived} />
+            <PrivateRoute path='/gems-sent-page' component={GemsSent} />
             <PrivateRoute path='/user-management' roles={[Role.Admin]} component={UserManagement} />
           </Layout>
       </>

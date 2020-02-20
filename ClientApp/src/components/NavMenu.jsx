@@ -46,52 +46,60 @@ export class NavMenu extends Component {
     render() {
         const { currentUser, isAdmin, isUser } = this.state; 
     return (
-      <header>
-          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+        <header style={{
+            width: '90%',
+            margin: '0 auto'
+        }}>
+          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom shadow mb-3 rounded-bottom" light>
               <Container>
-                  <NavbarBrand tag={Link} to="/">GemManager</NavbarBrand>
-                  <NavbarToggler onClick={this.toggleNavbar} className="mr-2"/>
-                  <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+                    <ul className="navbar-nav flex-grow col-4">
+                        {currentUser &&
+                        <>
+                        
+
+                        
+                                   
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/user-page">
+                                                Send Gem
+                                    </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/gems-received-page">
+                                                Gems Received
+                                    </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
+                                                Gems Sent
+                                    </NavLink>
+                                        </NavItem>
+                                    
+                         
+                            </>
+                         }
+                    </ul>
+                    <div style={{ textAlign: "center", width: "100%" }}>
+                        <NavbarBrand tag={Link} to="/" style={{ textAlign: "center" }}><img src="logo.png" /></NavbarBrand>
+                        </div>
+                  <Collapse className="d-sm-inline-flex flex-sm-row-reverse col-4" isOpen={!this.state.collapsed} navbar>
                       <ul className="navbar-nav flex-grow">
-                          <NavItem>
-                              <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                          </NavItem>
-                          {!currentUser && 
+                                                   {!currentUser && 
                         <NavItem>
                             <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
                         </NavItem>
                 }
                           {currentUser &&
                     <>
-                        {isAdmin &&
-                            <>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/user-management">
-                                        User Management
+{isAdmin &&
+                                    <>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/user-management">
+                                                User Management
                                      </NavLink>
-                                </NavItem>
-                            </>
-                        }
-                            
-                        {isUser &&
-                            <>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/user-page">
-                                        Send Gem
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/gems-received-page">
-                                        Gems Received
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
-                                        Gems Sent
-                                    </NavLink>
-                                </NavItem>
-                            </>
-                        }
+                                        </NavItem>
+                                    </>
+                                }
                         <Dropdown>
                           <Dropdown.Toggle variant="success" id="dropdown-basic">
                               {currentUser.username}
