@@ -13,6 +13,7 @@ import { GemTransfer } from './components/GemTransfer';
 import { UserPage } from './components/UserPage';
 import { GemsReceived } from './components/GemsReceived';
 import { GemsSent } from './components/GemsSent';
+import { WeekDisplay } from './components/WeekDisplay';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -23,6 +24,7 @@ export default class App extends Component {
           <Layout>
             <Route exact path='/' component={Home} />
             <Route path='/login' component={LoginPage} />
+            <Route path='/weekly' component={WeekDisplay}/>
             <PrivateRoute path='/user-page' component={UserPage} />
             <PrivateRoute path='/gems-received-page' component={GemsReceived} />
             <PrivateRoute path='/gems-sent-page' component={GemsSent} />

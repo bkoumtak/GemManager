@@ -1,6 +1,7 @@
 ﻿import React from 'react'; 
 import { v4 as uuidv4 } from 'uuid'; 
 import { authenticationService } from '../_services/authentication.service'; 
+import { getWeekSince } from '../_helpers/week-helper';
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -67,6 +68,7 @@ export class UserPage extends React.Component {
             },
            body: JSON.stringify({
                id: guid,
+               week: getWeekSince(),
                from: {
                    id: currentUser.id
                },
@@ -89,16 +91,6 @@ export class UserPage extends React.Component {
 
         var i;
         let toUserIndex = this.state.toUserIndex; 
-
-        /*
-        if (!this.state.dropDownClicked) {
-            for (i = 0; i < users.length; i++) {
-                if (users[i].id != currentUser.id) {
-                    toUserIndex = i;
-                    break;
-                }
-            }
-        }*/
 
         return (
             <>

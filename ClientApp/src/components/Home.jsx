@@ -4,6 +4,7 @@ import { authenticationService } from '../_services/authentication.service'
 
 export class Home extends Component {
     static displayName = Home.name;
+    
 
     constructor(props) {
         super(props);
@@ -65,7 +66,7 @@ export class Home extends Component {
     }
 
     render() {
-        let contents;
+        let contents; 
         if (!authenticationService.currentUserValue) {
             contents = <p><em>You're not logged in to the webiste...</em></p>
         } else {
