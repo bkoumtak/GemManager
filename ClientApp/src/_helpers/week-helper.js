@@ -2,9 +2,8 @@
 
 export function getWeekSince() {
     const startDate = "2020-01-07"; 
-    var today = moment();
-    console.log(date); 
-    var startDate = moment(date);
+    var today = moment(); 
+    var beginning = moment(startDate);
 
-    return today.diff(startDate, 'week');
+    return today.diff(beginning, 'week');
 }

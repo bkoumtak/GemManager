@@ -28,5 +28,14 @@ namespace GemManager.Controllers
             var gems = _gemRepository.GetAll();
             return Ok(gems); 
         }
+
+        [HttpGet]
+        [Route("{week:int}")]
+        public ActionResult Get(int week)
+        {
+            var gems = _gemRepository.GetByWeek(week);
+            return Ok(gems);
+        }
+
     }
 }

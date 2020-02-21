@@ -10,6 +10,8 @@ namespace GemManager.Repositories
 
         Gem GetById(Guid id);
 
+        IEnumerable<Gem> GetByWeek(int week); 
+
         void Save(Gem document);
 
         void Save(IEnumerable<Gem> document);
