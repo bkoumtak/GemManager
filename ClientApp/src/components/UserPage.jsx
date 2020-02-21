@@ -41,10 +41,15 @@ export class UserPage extends React.Component {
     }
 
     submitChoice() {
-        alert('Submitted rock to ' + this.state.users[this.state.toUserIndex].firstName)
         let currentUser = this.state.currentUser;
-        if (currentUser.gemsToGive > 0)
-            currentUser.gemsToGive -= 1; 
+        if (currentUser.gemsToGive > 0) {
+            currentUser.gemsToGive -= 1;
+            alert('Submitted rock to ' + this.state.users[this.state.toUserIndex].name);
+        }
+        else {
+            alert("You don't have enough gems to give to " + this.state.users[this.state.toUserIndex].name);
+            return;
+        }
 
         this.setState({
             currentUser: currentUser
@@ -80,7 +85,7 @@ export class UserPage extends React.Component {
  
         let list = users.map((user,index) => {
             if (user.id != currentUser.id) {
-                return <option key={index} value={index}>{user.firstName}</option>
+                return <option key={index} value={index}>{user.name}</option>
             }
         });
 
@@ -135,7 +140,9 @@ export class UserPage extends React.Component {
         // This code would be removed to take into account the current user returned
         if (data.length > 0) {
             let user = authenticationService.currentUserValue;
-            let initialIndex = user.Id == data[0].Id ? 0 : 1;
+            let initialIndex = user.id == data[0].id ? 0 : 1;
+
+            user.gemsToGive = data.find(curUser => curUser.id == user.id).gemsToGive;
 
             this.setState({
                 currentUser: user, users: data, loading: false, toUserIndex: initialIndex

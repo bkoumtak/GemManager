@@ -9,6 +9,7 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            gems: [],
             users: [],
             loading: true
         };
@@ -16,11 +17,31 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        if (authenticationService.currentUserValue)
+        if (authenticationService.currentUserValue) {
             this.populateUsers();
+        }
+    }
+
+    async populateRocks() {
+        const response = await fetch('api/gem', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        if (data.length > 0) {
+            this.setState({
+                gems: data,
+                loading: false
+            })
+        }
     }
 
     static renderUsers(users) {
+        let n = 0;
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -31,9 +52,10 @@ export class Home extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user =>
+                    {   
+                        users.map(user => 
                         <tr key={user.id}>
-                            <td>{user.name}</td>
+                            <td>{++n + '. ' + user.name}</td>
                             <td>{user.gemsToGive}</td>
                             <td align="center">{user.totalGems}</td>
                         </tr>
@@ -60,23 +82,25 @@ export class Home extends Component {
             </div>
         );
     }
-
-
-
+    
     async populateUsers() {
         const response = await fetch('api/user',
             {
                 method: 'GET',
                 headers: authHeader()
             }).then(handleResponse);
+
+        await this.populateRocks();
         
         var sortable = []; 
         for (var obj in response) {
             sortable.push(response[obj]); 
         }
 
+        sortable.map(x => { x.totalGems = this.state.gems.filter(y => y.to.id == x.id).length });
+        
         sortable.sort(this.totalGemsSort); 
-
+        
         if (response.length > 0)
             this.setState({ users: sortable, loading: false });
     }
