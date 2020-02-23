@@ -22,8 +22,13 @@ export class UserPage extends React.Component {
     }
 
     toUserChangeHandler(event) {
-        let id = event.target.value; 
-        
+        let id = event.target.value;
+
+        if (this.state.users[id].name == "Graveyard") {
+            this.setState({
+                currentTextMessage: "n/a"
+            });
+        }
 
         this.setState({
             toUserIndex: id, 
@@ -109,8 +114,20 @@ export class UserPage extends React.Component {
         });
 
         var i;
-        let toUserIndex = this.state.toUserIndex; 
+        let toUserIndex = this.state.toUserIndex;
 
+        let msg;
+
+        if (this.state.users[toUserIndex].name != "Graveyard") {
+           msg = <div className="form-group">
+            <label htmlFor="reasonTextArea">Why are you giving this gem to {this.state.users[toUserIndex]
+                .name} ?</label>
+            <textarea className="form-control" id="reasonTextArea" rows="3" onChange={this
+                .textMessageChangeHandler.bind(this)}></textarea>
+        </div>
+        } else {
+            msg = <div className="form-group"></div>;
+}
         return (
             <>
                 <h1> Hi {currentUser.firstName}! </h1>
@@ -121,10 +138,7 @@ export class UserPage extends React.Component {
                     {list}
                 </select>  
 
-                <div className="form-group">
-                    <label htmlFor="reasonTextArea">Why are you giving this gem to {this.state.users[toUserIndex].firstName} ?</label>
-                    <textarea className="form-control" id="reasonTextArea" rows="3" onChange={this.textMessageChangeHandler.bind(this)}></textarea>
-                </div>     
+                {msg}
 
                 <button type="button" className="btn btn-outline-dark" onClick={this.submitChoice.bind(this)}>Submit this gem</button>
             </>
