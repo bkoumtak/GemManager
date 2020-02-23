@@ -21,7 +21,7 @@ export class GemsSent extends React.Component {
             if (gem.from.id == currentUser.id) {
                 let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
                     <div className="card-header">
-                        You sent a gem to {gem.to.firstName} {gem.to.lastName} !
+                        You sent a gem to {gem.to.name}!
                     </div>
 
                     <div className="card-body">

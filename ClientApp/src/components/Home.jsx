@@ -42,6 +42,18 @@ export class Home extends Component {
 
     static renderUsers(users) {
         let n = 0;
+        let graveyard = users.find(x => x.name == "Graveyard");
+        let tfoot = "";
+
+        if (graveyard != undefined)
+            tfoot = <tfoot>
+                    <tr>
+                        <td>{graveyard.name}</td>
+                        <td></td>
+                        <td style={{ textAlign: 'center' }}>{graveyard.totalGems}</td>
+                    </tr>
+                    </tfoot>;
+
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -53,14 +65,19 @@ export class Home extends Component {
                 </thead>
                 <tbody>
                     {   
-                        users.map(user => 
-                        <tr key={user.id}>
-                            <td>{++n + '. ' + user.name}</td>
-                            <td>{user.gemsToGive}</td>
-                            <td align="center">{user.totalGems}</td>
-                        </tr>
-                    )}
+                        users.map(user => {
+                                if (user.name != "Graveyard") {
+                                    return <tr key={user.id}>
+                                               <td>{++n + '. ' + user.name}</td>
+                                               <td>{user.gemsToGive}</td>
+                                               <td align="center">{user.totalGems}</td>
+                                           </tr>
+                                }
+                        })
+                    }
+                    
                 </tbody>
+                {tfoot}
             </table>
         );
     }

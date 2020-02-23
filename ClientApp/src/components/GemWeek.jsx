@@ -18,7 +18,7 @@ export class GemWeek extends React.Component {
             if (gem.week == this.props.match.params.week) {
                 let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
                     <div className="card-header">
-                        {gem.from.firstName} {gem.from.lastName} sent a gem to {gem.to.firstName} {gem.to.lastName}
+                        {gem.from.name} sent a gem to {gem.to.name}
                     </div>
 
                     <div className="card-body">
