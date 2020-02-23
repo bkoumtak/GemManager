@@ -43,42 +43,77 @@ export class Home extends Component {
     static renderUsers(users) {
         let n = 0;
         let graveyard = users.find(x => x.name == "Graveyard");
-        let tfoot = "";
+        let tfoot = <tfoot></tfoot>;
 
-        if (graveyard != undefined)
+        let user = users.find(x => x.id == authenticationService.currentUserValue.id);
+        let usersWithoutGraveyard = users.filter(x => x != graveyard);
+        let userStats = <tr></tr>;
+        
+        if (graveyard)
             tfoot = <tfoot>
                     <tr>
                         <td>{graveyard.name}</td>
                         <td></td>
                         <td style={{ textAlign: 'center' }}>{graveyard.totalGems}</td>
                     </tr>
-                    </tfoot>;
+            </tfoot>;
+
+        if (user)
+            userStats = <tr>
+                            <td><b>{(usersWithoutGraveyard.indexOf(user) + 1) + '. ' + user.name}</b></td>
+                            <td>{user.gemsToGive}</td>
+                            <td style={{ textAlign: 'center' }}>{user.totalGems}</td>
+                        </tr>
 
         return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
+            <>
+                <h1 id="dashboardLabel">Dashboard</h1>
+                <table className='table table-striped' aria-labelledby="dashboardLabel">
+                    <thead>
                     <tr>
-                        <th>User</th>
+                        <th></th>
                         <th>Rocks to give</th>
                         <th style={{ textAlign: 'center' }}>Total Gems</th>
                     </tr>
-                </thead>
-                <tbody>
-                    {   
-                        users.map(user => {
-                                if (user.name != "Graveyard") {
-                                    return <tr key={user.id}>
-                                               <td>{++n + '. ' + user.name}</td>
-                                               <td>{user.gemsToGive}</td>
-                                               <td align="center">{user.totalGems}</td>
-                                           </tr>
-                                }
-                        })
-                    }
-                    
-                </tbody>
-                {tfoot}
-            </table>
+                    </thead>
+                    <tbody>
+                        {userStats}
+                    </tbody>
+                </table>
+
+                <br/>
+
+                <h1 id="tabelLabel">Top 3 Users</h1>
+
+                <table className='table table-striped' aria-labelledby="tabelLabel">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Rocks to give</th>
+                            <th style={{ textAlign: 'center' }}>Total Gems</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {   
+                            users.map(user => {
+
+                                    if (n >= 3)
+                                        return;
+
+                                    if (user.name != "Graveyard") {
+                                        return <tr key={user.id}>
+                                                   <td>{++n + '. ' + user.name}</td>
+                                                   <td>{user.gemsToGive}</td>
+                                                   <td align="center">{user.totalGems}</td>
+                                               </tr>
+                                    }
+                            })
+                        }
+                        
+                    </tbody>
+                    {tfoot}
+                </table>
+            </>
         );
     }
 
@@ -94,7 +129,6 @@ export class Home extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel">User Rankings</h1>
                 {contents}
             </div>
         );

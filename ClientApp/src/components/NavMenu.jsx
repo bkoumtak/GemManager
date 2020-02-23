@@ -6,6 +6,7 @@ import { history } from '../_helpers/history';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 import { UserPage } from './UserPage';
+import { getWeekSince } from '../_helpers/week-helper'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown } from 'react-bootstrap';
 
@@ -50,49 +51,31 @@ export class NavMenu extends Component {
             width: '90%',
             margin: '0 auto'
         }}>
-          <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom shadow mb-3 rounded-bottom" light>
-              <Container>
+            <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom shadow mb-3 rounded-bottom" light>
+                <Container>
                     <ul className="navbar-nav flex-grow col-4">
                         {currentUser &&
-                        <>
-                        
-
-                        
-                                   
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/user-page">
-                                                Send Gem
-                                    </NavLink>
-                                        </NavItem>
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/gems-received-page">
-                                                Gems Received
-                                    </NavLink>
-                                        </NavItem>
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
-                                                Gems Sent
-                                    </NavLink>
-                                        </NavItem>
-                                    
-                         
+                            <>
+                                 <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/user-page">Send Gem</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                <NavLink tag={Link} className="text-dark" to={`/weekly/${getWeekSince()}`}>Weekly Summary</NavLink>
+                                </NavItem>
                             </>
                          }
                     </ul>
                     <div style={{ textAlign: "center", width: "100%" }}>
-                        <NavbarBrand tag={Link} to="/" style={{ textAlign: "center" }}><img src="logo.png" /></NavbarBrand>
-                        </div>
-                  <Collapse className="d-sm-inline-flex flex-sm-row-reverse col-4" isOpen={!this.state.collapsed} navbar>
-                      <ul className="navbar-nav flex-grow">
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/weekly">Weekly Summary</NavLink>
-                        </NavItem>
-                {!currentUser && 
+                        <NavbarBrand tag={Link} to="/" style={{ textAlign: "center" }}><img src="logo.png"/></NavbarBrand>
+                    </div>
+                    <Collapse className="d-sm-inline-flex flex-sm-row-reverse col-4" isOpen={!this.state.collapsed} navbar>
+                        <ul className="navbar-nav flex-grow">
+                            {!currentUser && 
                         <NavItem>
                             <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
                         </NavItem>
                 }
-                          {currentUser &&
+                            {currentUser &&
                     <>
                 {isAdmin &&
                                     <>
@@ -108,17 +91,27 @@ export class NavMenu extends Component {
                               {currentUser.username}
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
-                              <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/gems-received-page">
+                                                Gems Received
+                                            </NavLink>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
+                                                Gems Sent
+                                            </NavLink>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={this.logout}><NavLink>Logout</NavLink></Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                     </>
                 }
-                            
-              </ul>
-            </Collapse>
-          </Container>
-        </Navbar>
-      </header>
+
+                        </ul>
+                    </Collapse>
+                </Container>
+            </Navbar>
+        </header>
     );
   }
 }
