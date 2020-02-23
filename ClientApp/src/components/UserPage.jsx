@@ -82,21 +82,21 @@ export class UserPage extends React.Component {
         .then(handleResponse)
         .catch((error) => {
            alert(error);
-        });
-
-        fetch('api/user/' + currentUser.id, {
-           method: 'PUT',
-           headers: {
-               ...{
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json'
-               }
-           },
-           body: JSON.stringify({
-               id: currentUser.id,
-               gemsToGive: currentUser.gemsToGive
-           })
-       })
+        })
+        .then(
+            fetch('api/user/' + currentUser.id, {
+            method: 'PUT',
+            headers: {
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            },
+            body: JSON.stringify({
+                id: currentUser.id,
+                gemsToGive: currentUser.gemsToGive
+            })})
+        );
     }
 
     renderUserPage(users) {
