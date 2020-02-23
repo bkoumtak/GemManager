@@ -9,16 +9,24 @@ namespace GemManager.Controllers
     public class GemController : ControllerBase
     {
         private readonly IGemRepository _gemRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public GemController(IGemRepository gemRepository)
+        public GemController(IGemRepository gemRepository, IRepository<User> userRepository)
         {
             _gemRepository = gemRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost]
         public ActionResult Post(Gem gems)
         {
-            _gemRepository.Save(gems);
+            var curUser = _userRepository.GetById(gems.From.Id);
+
+            if (curUser.GemsToGive > 0)
+                _gemRepository.Save(gems);
+            else
+                return BadRequest("You don't have enough gems to give");
+
             return Ok();
         }
 

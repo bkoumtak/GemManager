@@ -9,7 +9,13 @@ export function handleResponse(response) {
                 window.location.reload(true); 
             }
 
-            const error = (data && data.message) || response.statusText; 
+            let error = (data && data.message) || response.statusText; 
+
+            if ([400].indexOf(response.status) !== -1) {
+                window.location.reload(true);
+                error = data;
+            }
+
             return Promise.reject(error); 
         }
 

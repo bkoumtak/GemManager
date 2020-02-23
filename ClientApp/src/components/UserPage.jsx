@@ -2,6 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'; 
 import { authenticationService } from '../_services/authentication.service'; 
 import { getWeekSince } from '../_helpers/week-helper';
+import { handleResponse } from '../_helpers/handle-response';
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -76,8 +77,26 @@ export class UserPage extends React.Component {
                    id: toUser.id
                },
                message: this.state.currentTextMessage
-            })
+            }),
+       })
+        .then(handleResponse)
+        .catch((error) => {
+           alert(error);
         });
+
+        fetch('api/user/' + currentUser.id, {
+           method: 'PUT',
+           headers: {
+               ...{
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+               }
+           },
+           body: JSON.stringify({
+               id: currentUser.id,
+               gemsToGive: currentUser.gemsToGive
+           })
+       })
     }
 
     renderUserPage(users) {
@@ -140,9 +159,10 @@ export class UserPage extends React.Component {
         // This code would be removed to take into account the current user returned
         if (data.length > 0) {
             let user = authenticationService.currentUserValue;
-            let initialIndex = user.id == data[0].id ? 0 : 1;
+            let initialIndex = 0;
 
             user.gemsToGive = data.find(curUser => curUser.id == user.id).gemsToGive;
+            localStorage.setItem('currentUser', JSON.stringify(user));
 
             this.setState({
                 currentUser: user, users: data, loading: false, toUserIndex: initialIndex
