@@ -89,7 +89,6 @@ namespace GemManager.Controllers
             return BadRequest(new { message = "Username or password is incorrect" });
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult Get()
         {
