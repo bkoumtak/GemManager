@@ -59,14 +59,11 @@ export class UserPage extends React.Component {
 
         this.setState({
             currentUser: currentUser
-        })
+        });
 
         let toUser = this.state.users[this.state.toUserIndex]; 
-        let guid = uuidv4(); 
-        console.log(uuidv4());
-        console.log(currentUser.id); 
-        console.log(toUser.id); 
-       fetch('api/gem', {
+        let guid = uuidv4();
+        fetch('api/gem', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -127,20 +124,24 @@ export class UserPage extends React.Component {
         </div>
         } else {
             msg = <div className="form-group"></div>;
-}
+        }
         return (
             <>
                 <h1> Hi {currentUser.firstName}! </h1>
-                <h1> You currently have {currentUser.gemsToGive} gems to give this week.</h1> 
+                <h1> <em>You currently have {this.state.currentUser.gemsToGive? currentUser.gemsToGive: <>no</>} gems to give this week. </em></h1> 
 
-                <label className="mr-sm-2" htmlFor="toUser">Give a gem to: </label>
-                <select className="form-control mr-sm-2" id="toUser" onChange={this.toUserChangeHandler.bind(this)}>
-                    {list}
-                </select>  
+                { this.state.currentUser.gemsToGive > 0 && 
+                    <>
+                        <label className="mr-sm-2" htmlFor="toUser">Give a gem to: </label>
+                        <select className="form-control mr-sm-2" id="toUser" onChange={this.toUserChangeHandler.bind(this)}>
+                            {list}
+                        </select>  
 
-                {msg}
+                        {msg}
 
-                <button type="button" className="btn btn-outline-dark" onClick={this.submitChoice.bind(this)}>Submit this gem</button>
+                        <button type="button" className="btn btn-outline-dark" onClick={this.submitChoice.bind(this)}>Submit this gem</button>
+                    </>
+                }
             </>
         ); 
     }
