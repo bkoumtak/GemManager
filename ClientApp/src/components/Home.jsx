@@ -36,7 +36,7 @@ export class Home extends Component {
             this.setState({
                 gems: data,
                 loading: false
-            })
+            });
         }
     }
 
@@ -120,7 +120,7 @@ export class Home extends Component {
     render() {
         let contents; 
         if (!authenticationService.currentUserValue) {
-            contents = <p><em>You're not logged in to the webiste...</em></p>
+            contents = <p><em>You're not logged in to the website yet...</em></p>
         } else {
             contents = this.state.loading
                         ? <p><em>Loading...</em></p>

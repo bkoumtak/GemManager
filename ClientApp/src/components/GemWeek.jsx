@@ -14,23 +14,33 @@ export class GemWeek extends React.Component {
     }
 
     renderGems() {
-        var list = this.state.gems.map(gem => {
-            if (gem.week == this.props.match.params.week) {
-                let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
-                    <div className="card-header">
-                        {gem.from.name} sent a gem to {gem.to.name}
-                    </div>
+        var content;
 
-                    <div className="card-body">
-                        <b>{gem.message}</b>
-                    </div>
-                </div>
+        var i;
+        var list = [];
+        var gems = this.state.gems; 
+        for (i = 0; i < this.state.gems.length; i++) {
+            if (gems[i].week == this.props.match.params.week) {
+                let card = <div key={gems[i].id} className="card" style={{ marginTop: 2 + 'em' }} >
+                               <div className="card-header">
+                                    {gems[i].from.name} sent a gem to {gems[i].to.name}
+                               </div>
 
-                return card;
+                               <div className="card-body">
+                                    <b>{gems[i].message}</b>
+                               </div>
+                           </div>
+
+                list.push(card); 
             }
-        });
+        }
 
-        return list; 
+        if (list.length > 0)
+            content = list; 
+        else 
+            content = <em>There are no gems that have been transferred yet this week.</em>
+
+        return content; 
     }
 
     render() {
@@ -56,11 +66,10 @@ export class GemWeek extends React.Component {
 
         const data = await response.json();
 
-        if (data.length > 0) {
-            this.setState({
-                gems: data,
-                loading: false
-            })
-        }
+        this.setState({
+            gems: data,
+            loading: false
+        }); 
+        
     }
 }

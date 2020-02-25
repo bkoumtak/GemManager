@@ -17,6 +17,7 @@ export class GemsSent extends React.Component {
     renderGems() {
         let currentUser = authenticationService.currentUserValue;
 
+        var content; 
         var list = this.state.gems.map(gem => {
             if (gem.from.id == currentUser.id) {
                 let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
@@ -33,7 +34,12 @@ export class GemsSent extends React.Component {
             }
         });
 
-        return list;
+        if (this.state.gems.length > 0)
+            var content = list;
+        else
+            var content = <em>You currently have not sent any gems.</em>;
+
+        return content;
     }
 
     render() {
@@ -59,11 +65,9 @@ export class GemsSent extends React.Component {
         console.log(response);
 
         const data = await response.json();
-        if (data.length > 0) {
-            this.setState({
-                gems: data,
-                loading: false
-            })
-        }
+        this.setState({
+            gems: data,
+            loading: false
+        });
     }
 }
