@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GemManager.Models;
 using GemManager.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GemManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GemController : ControllerBase
     {
         private readonly IGemRepository _gemRepository;
@@ -20,13 +22,20 @@ namespace GemManager.Controllers
         [HttpPost]
         public ActionResult Post(Gem gems)
         {
-            var curUser = _userRepository.GetById(gems.From.Id);
+            ValidationHelper.ValidateUser(Request, out var userGuid, out var userRole);
 
-            if (curUser.GemsToGive > 0)
-                _gemRepository.Save(gems);
+            if (userGuid == gems.From.Id) { 
+                var curUser = _userRepository.GetById(gems.From.Id);
+
+                if (curUser.GemsToGive > 0)
+                    _gemRepository.Save(gems);
+                else
+                    return BadRequest("You don't have enough gems to give");
+            }
             else
-                return BadRequest("You don't have enough gems to give");
-
+            {
+                return BadRequest("The operation is not allowed");
+            }
             return Ok();
         }
 

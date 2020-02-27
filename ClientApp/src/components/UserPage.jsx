@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'; 
 import { authenticationService } from '../_services/authentication.service'; 
 import { getWeekSince } from '../_helpers/week-helper';
-import { handleResponse } from '../_helpers/handle-response';
+import { authHeader, handleResponse } from '../_helpers';
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -66,8 +66,11 @@ export class UserPage extends React.Component {
         fetch('api/gem', {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
             },
            body: JSON.stringify({
                id: guid,
@@ -92,7 +95,8 @@ export class UserPage extends React.Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }
+                },
+                ...authHeader()
             },
             body: JSON.stringify({
                 id: currentUser.id,

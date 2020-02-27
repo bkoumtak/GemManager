@@ -71,7 +71,9 @@ namespace GemManager.Controllers
                     {
                         Subject = new ClaimsIdentity(new Claim[]
                         {
-                            new Claim(ClaimTypes.Name, model.Username)
+                            new Claim(ClaimTypes.Name, model.Username),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            new Claim(ClaimTypes.Role, user.Role)
                         }),
                         Expires = DateTime.UtcNow.AddDays(7),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -105,35 +107,22 @@ namespace GemManager.Controllers
             var user = _userRepository.GetById(id);
             return Ok(user);
         }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult Post(User users)
-        {
-            _userRepository.Save(users);
-            return Ok();
-        }
-
-        [HttpDelete]
-        [Route("{id:guid}")]
-        public ActionResult Delete(Guid id)
-        {
-            _userRepository.Delete(id);
-            return NoContent();
-        }
-
-        [AllowAnonymous]
+        
         [HttpPut]
         [Route("{id:guid}")]
         public ActionResult Put(User user)
         {
-            var userFromDb = _userRepository.GetById(user.Id);
+            ValidationHelper.ValidateUser(Request, out var userGuid, out var userRole);
+            if (user.Id == userGuid || userRole == "Admin") { 
+                var userFromDb = _userRepository.GetById(user.Id);
 
-            userFromDb.GemsToGive = user.GemsToGive;
-            userFromDb.TotalGems = user.TotalGems;
-            
-            _userRepository.Save(userFromDb);
-            return Ok(userFromDb);
+                userFromDb.GemsToGive = user.GemsToGive;
+                userFromDb.TotalGems = user.TotalGems;
+                
+                _userRepository.Save(userFromDb);
+                return Ok(userFromDb);
+            }
+            return BadRequest(new { message = "Username or password is incorrect" });
         }
 
         [HttpPut("add2gems")]
