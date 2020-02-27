@@ -6,7 +6,8 @@ export class GemsSent extends React.Component {
         super(props);
         this.state = {
             gems: [],
-            loading: true
+            loading: true,
+            message: ""
         };
     }
 
@@ -14,23 +15,30 @@ export class GemsSent extends React.Component {
         this.populateRocks();
     }
 
+    displayMessage(gemMessage) {
+        this.setState({
+            message: gemMessage
+        });
+    }
+
     renderGems() {
         let currentUser = authenticationService.currentUserValue;
 
         var content; 
+        var i = 0; 
+
         var list = this.state.gems.map(gem => {
+
             if (gem.from.id == currentUser.id) {
-                let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
-                    <div className="card-header">
-                        You sent a gem to {gem.to.name}!
-                    </div>
-
-                    <div className="card-body">
-                        <b>Your message:</b> {gem.message}
-                    </div>
-                </div>
-
-                return card;
+                let button = <button className="btn btn-squared-default btn-danger mb-1 " onClick={this.displayMessage.bind(this,
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.to.firstName}</button>;
+                let button_new = <><button className="btn btn-squared-default btn-danger mb-1" onClick={this.displayMessage.bind(this,
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.to.firstName}</button><br /></>
+                i++;
+                if (i % 5 === 0)
+                    return button_new
+                else
+                    return button;
             }
         });
 
@@ -47,8 +55,17 @@ export class GemsSent extends React.Component {
 
         return (
             <>
-                <h5> Gems you have sent: </h5>
-                {content}
+                <center><em><h1>Gems you have sent: </h1></em></center>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            {content}
+                        </div>
+                        <div class="col">
+                            <u><h3>Message:</h3></u> <h4><em>{this.state.message}</em></h4>
+                        </div>
+                    </div>
+                </div>
             </>
         );
     }
