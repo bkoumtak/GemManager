@@ -136,6 +136,22 @@ namespace GemManager.Controllers
             return Ok(userFromDb);
         }
 
+        [HttpPut("add2gems")]
+        public ActionResult Add2GemsToAllMembers()
+        {
+            var usersFromDb = _userRepository.GetAll();
+            
+            var usersFromDbWith2Gems = usersFromDb.Select(x =>
+            {
+                if (x.Name != "Graveyard")
+                    x.GemsToGive += 2;
+                
+                return x;
+            });
+            
+            _userRepository.Save(usersFromDbWith2Gems);
 
+            return Ok();
+        }
     }
 }
