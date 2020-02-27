@@ -41,19 +41,26 @@ export class UserManagement extends Component {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Number of Rocks</th>
-                        <th style={{ textAlign: 'center' }}>Actions</th>
-                    </tr>
+                <tr>
+                    <th>User</th>
+                    <th>Number of Rocks</th>
+                    <th style={{ textAlign: 'center' }}>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {users.map(user =>
-                        <tr key={user.id}>
-                            <td>{user.name}</td>
-                            <td>{user.gemsToGive}</td>
-                            <td align="center"><a onClick={() => addOrSubstractRocks(user.id, "+")}>+</a> | <a onClick={() => addOrSubstractRocks(user.id, "-")}>-</a></td>
-                        </tr>
+                {users.map(user => {
+                            if (user.name !== "Graveyard") {
+                                return <tr key={user.id}>
+                                            <td>{user.name}</td>
+                                            <td>{user.gemsToGive}</td>
+                                            <td align="center">
+                                                <a style={{ cursor: 'pointer' }} onClick={() => addOrSubstractRocks(user.id, "+")}>+</a>
+                                                |
+                                                <a style={{ cursor: 'pointer' }} onClick={() => addOrSubstractRocks(user.id, "-")}>-</a>
+                                            </td>
+                                        </tr>
+                            }
+                        }
                     )}
                 </tbody>
             </table>
@@ -67,7 +74,14 @@ export class UserManagement extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel">User Management</h1>
+                <div className="row">
+                    <div className="col-9">
+                        <h1 id="tabelLabel">User Management</h1>
+                    </div>
+                    <div className="col-3" style={{ textAlign: 'center' }}>
+                        <button type="button" className="btn btn-outline-dark" onClick={this.submit.bind(this)}>Add 2 Gems</button>
+                    </div>
+                </div>
                 {contents}
             </div>
         );
@@ -86,6 +100,27 @@ export class UserManagement extends Component {
         });
         const data = await response.json();
         this.setState({ users: data, loading: false });
+    }
+
+    submit() {
+        fetch('api/user/add2gems',
+                {
+                    method: 'PUT',
+                    headers: {
+                        ...{
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        ...authHeader()
+                    },
+                })
+            .then(handleResponse)
+            .catch((error) => {
+                alert(error);
+            })
+            .then(
+                window.location.reload()
+            );
     }
 
     async pushUserRocks(id, rocks) {

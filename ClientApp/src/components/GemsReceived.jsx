@@ -6,6 +6,7 @@ export class GemsReceived extends React.Component {
         super(props); 
         this.state = {
             gems: [],
+            message: "",
             loading: true
         }; 
     }
@@ -14,24 +15,30 @@ export class GemsReceived extends React.Component {
         this.populateRocks(); 
     }
 
-    renderRocks() {
+    displayMessage(gemMessage) {
+        this.setState({
+            message: gemMessage
+        });
+    }
+
+    renderGems() {
         let currentUser = authenticationService.currentUserValue;
 
         var content; 
+        var i = 0; 
 
         var list = this.state.gems.map(gem => {
-            if (gem.to.id == currentUser.id) {
-                let card = <div key={gem.id} className="card" style={{ marginTop: 2 + 'em' }} >
-                    <div className="card-header">
-                        You got a gem from {gem.from.firstName} {gem.from.lastName} !
-                    </div>
-             
-                    <div className="card-body">
-                        <b>Their message:</b> {gem.message}
-                    </div>
-                </div>
 
-                return card;
+            if (gem.to.id == currentUser.id) {
+                let button = <button className="btn btn-squared-default btn-info mb-1 " onClick={this.displayMessage.bind(this,
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from.firstName}</button>;
+                let button_new = <><button className="btn btn-squared-default btn-info mb-1" onClick={this.displayMessage.bind(this,
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from.firstName}</button><br /></>
+                i++; 
+                if (i % 5 === 0)
+                    return button_new
+                else
+                    return button;
             }
         });
 
@@ -44,12 +51,21 @@ export class GemsReceived extends React.Component {
     }
 
     render() {
-        const content = this.state.loading ? <h1><em>Loading...</em></h1> : this.renderRocks(this.state.gems);
+        const content = this.state.loading ? <h1><em>Loading...</em></h1> : this.renderGems(this.state.gems);
 
         return (
             <>
-                <h5> Gems you have received: </h5>
-                { content }
+                <center><em><h1>Gems you have received </h1></em></center>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            {content}
+                        </div>
+                        <div class="col">
+                            <u><h3>Message:</h3></u> <h4><em>{this.state.message}</em></h4>
+                        </div>
+                    </div>
+                </div>
             </>
         );
     }
@@ -63,13 +79,11 @@ export class GemsReceived extends React.Component {
             }
         }); 
 
-        console.log(response); 
-
         const data = await response.json();
+
         this.setState({
                 gems: data,
                 loading: false
         });
-        
     }
 }
