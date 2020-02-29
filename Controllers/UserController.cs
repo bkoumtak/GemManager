@@ -4,9 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using GemManager.Commands;
 using GemManager.Helpers;
 using GemManager.Models;
 using GemManager.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,12 +26,14 @@ namespace GemManager.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IRepository<User> _userRepository;
         private readonly AppSettings _appSettings;
+        private readonly IMediator _mediator;
 
-        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IOptions<AppSettings> appSettings)
+        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IOptions<AppSettings> appSettings, IMediator mediator)
         {
             _logger = logger;
             _userRepository = userRepository;
             _appSettings = appSettings.Value;
+            _mediator = mediator;
         }
 
         [AllowAnonymous]
@@ -95,6 +99,7 @@ namespace GemManager.Controllers
         public ActionResult Get()
         {
             var users = _userRepository.GetAll();
+            _mediator.Send(new IdentifyCards());
             
             return Ok(users);
         }

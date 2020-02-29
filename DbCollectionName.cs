@@ -9,5 +9,6 @@ namespace GemManager
     {
         public const string User = "users";
         public const string Gem = "gems";
+        public const string Card = "cards";
     }
 }
