@@ -36,5 +36,13 @@ namespace GemManager.Repositories
                 .Include(gems => gems.To)
                 .Find(d => d.Week == week); 
         }
+
+        public IEnumerable<Gem> GetByUser(Guid id)
+        {
+            return GetLiteCollection()
+                .Include(gems => gems.From)
+                .Include(gems => gems.To)
+                .Find(d => d.To.Id == id);
+        }
     }
 }
