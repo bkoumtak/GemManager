@@ -8,6 +8,7 @@ namespace GemManager.Enumerations
     public enum CardType
     {
         SELF_HUG,
-        ROBIN_HOOD
+        ROBIN_HOOD,
+        STEAL_GEM
     }
 }
