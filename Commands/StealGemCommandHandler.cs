@@ -34,11 +34,11 @@ namespace GemManager.Commands
             if (gem != null)
             {
                 var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+                var user = _userRepository.GetById(userGuid);
+
                 var cardsInPossession = _cardRepository.GetByUserAndCardType(userGuid, CardType.STEAL_GEM);
                 if (!cardsInPossession.Any())
                     return Task.FromResult(false); 
-
-                var user = _userRepository.GetById(userGuid);
 
                 gem.Message += "\n Stolen from: " + gem.To.FirstName;
                 gem.To = user;
