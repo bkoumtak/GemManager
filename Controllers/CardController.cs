@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using System;
 using GemManager.Commands;
 using GemManager.Models;
-using GemManager.Repositories; 
+using GemManager.Repositories;
+using GemManager.Enumerations;
 
 namespace GemManager.Controllers
 {
@@ -29,7 +30,7 @@ namespace GemManager.Controllers
         }
 
         [Route("robin_hood/{source}/{target}")]
-        public async Task<bool> Get(string source, string target)
+        public async Task<bool> RobinHood(string source, string target)
         {
             var sourceGuid = Guid.Parse(source);
             var targetGuid = Guid.Parse(target);
@@ -38,12 +39,25 @@ namespace GemManager.Controllers
         }
 
         [Route("self_hug/{gems}")]
-        public async Task<bool> Get(string gems)
+        public async Task<bool> SelfHug(string gems)
         {
             var gemsToGive = Int32.Parse(gems);
             return await _mediator.Send(new SelfHugCommand(Request, gemsToGive)); 
         }
 
+        [Route("steal_gem/{target}")]
+        public async Task<bool> StealGem(string target)
+        {
+            var targetGuid = Guid.Parse(target); 
+            return await _mediator.Send(new StealGemCommand(Request, targetGuid));
+        }
 
+        [Route("steal_card/{target}/{card}")]
+        public async Task<bool> StealCard(string target, string card)
+        {
+            var targetGuid = Guid.Parse(target);
+            Enum.TryParse(card, out CardType cardType);
+            return await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
+        }
     }
 }
