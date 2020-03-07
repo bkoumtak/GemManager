@@ -1,4 +1,5 @@
 ﻿using System;
+using GemManager.Enumerations;
 using LiteDB;
 
 namespace GemManager.Models
@@ -13,5 +14,6 @@ namespace GemManager.Models
         [BsonRef(DbCollectionName.User)]
         public User Owner { get; set; }
 
+        public CardType CardType { get; set; }
     }
 }
