@@ -10,7 +10,7 @@ namespace GemManager.Commands
 {
     public class StealCardCommand : IRequest<bool>
     {
-        public HttpRequest HttpRequest { get; set; }
+        public HttpRequest Request { get; set; }
 
         public Guid Target { get; set; }
 
@@ -18,7 +18,7 @@ namespace GemManager.Commands
 
         public StealCardCommand(HttpRequest httpRequest, Guid target, CardType card)
         {
-            HttpRequest = httpRequest;
+            Request = httpRequest;
             Target = target;
             Card = card; 
         }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GemManager.Enumerations;
+using GemManager.Controllers;
 
 namespace GemManager.Commands
 {
@@ -31,7 +32,7 @@ namespace GemManager.Commands
             }
             else
             {
-                var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+                ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
                 var user = _userRepository.GetById(userGuid);
 
                 var userCards = _cardRepository.GetByUserAndCardType(userGuid, CardType.STEAL_CARD);

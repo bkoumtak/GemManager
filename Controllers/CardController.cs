@@ -22,6 +22,14 @@ namespace GemManager.Controllers
             _cardRepository = cardRepository; 
         }
 
+        [HttpGet]
+        public ActionResult Get()
+        {
+            var cards = _cardRepository.GetAll();
+
+            return Ok(cards);
+        }
+
         [HttpPost]
         public ActionResult Post(Card card)
         {
@@ -56,7 +64,7 @@ namespace GemManager.Controllers
         public async Task<bool> StealCard(string target, string card)
         {
             var targetGuid = Guid.Parse(target);
-            Enum.TryParse(card, out CardType cardType);
+            var cardType = (CardType)Int32.Parse(card);
             return await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
         }
     }

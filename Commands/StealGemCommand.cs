@@ -9,12 +9,12 @@ namespace GemManager.Commands
 {
     public class StealGemCommand : IRequest<bool>
     {
-        public HttpRequest HttpRequest { get; set; } 
+        public HttpRequest Request { get; set; } 
         public Guid Target { get; set; }
 
         public StealGemCommand(HttpRequest httpRequest, Guid target)
         {
-            HttpRequest = httpRequest;
+            Request = httpRequest;
             Target = target; 
         }
     }

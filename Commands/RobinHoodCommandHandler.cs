@@ -7,6 +7,7 @@ using GemManager.Repositories;
 using GemManager.Models;
 using MediatR;
 using GemManager.Enumerations;
+using GemManager.Controllers;
 
 namespace GemManager.Commands
 {
@@ -26,10 +27,12 @@ namespace GemManager.Commands
             var sourceUserGems = _gemRepository.GetByUser(request.Source);
             var targetUserGems = _gemRepository.GetByUser(request.Target);
 
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
+
             if (!sourceUserGems.Any())
                 return Task.FromResult(false);
 
-            var cardsInHand = _cardRepository.GetByUserAndCardType(Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54"), CardType.ROBIN_HOOD);
+            var cardsInHand = _cardRepository.GetByUserAndCardType(userGuid, CardType.ROBIN_HOOD);
 
             if (!cardsInHand.Any())
                 return Task.FromResult(false); 

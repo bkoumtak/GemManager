@@ -14,5 +14,7 @@ namespace GemManager.Repositories
         void Save(Card document);
 
         void Save(IEnumerable<Card> document);
+
+        IEnumerable<Card> GetAll();
     }
 }

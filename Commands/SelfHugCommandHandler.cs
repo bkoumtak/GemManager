@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GemManager.Repositories;
 using GemManager.Models;
 using GemManager.Enumerations;
+using GemManager.Controllers;
 using MediatR;
 
 namespace GemManager.Commands
@@ -26,7 +27,9 @@ namespace GemManager.Commands
         public Task<bool> Handle(SelfHugCommand request, CancellationToken cancellationToken)
         {
             var gemsList = new List<Gem>();
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
+
             var user = _userRepository.GetById(userGuid);
 
             var cardsOfUser = _cardRepository.GetByUserAndCardType(userGuid, CardType.SELF_HUG); 
