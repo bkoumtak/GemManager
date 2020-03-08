@@ -25,7 +25,7 @@ export default class App extends Component {
             <Route exact path='/' component={Home} />
             <Route path='/login' component={LoginPage} />
             <Route path='/weekly' component={WeekDisplay} />
-            <PrivateRoute path='/card-page' component={CardPage}/>
+            <Route path='/card-page' component={CardPage}/>
             <PrivateRoute path='/user-page' component={UserPage} />
             <PrivateRoute path='/gems-received-page' component={GemsReceived} />
             <PrivateRoute path='/gems-sent-page' component={GemsSent} />

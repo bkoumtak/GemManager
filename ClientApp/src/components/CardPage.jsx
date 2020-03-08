@@ -9,13 +9,60 @@ export class CardPage extends Component {
         super(props); 
         this.state = {
             cards: [],
-            loading: true
+            users: [],
+            loading: true,
+            selfhug: false,
+            robinhood: false, 
+            stealgem: false,
+            stealcard: false
         };
+
+        this.toggleSelfHug = this.toggleSelfHug.bind(this); 
+        this.toggleRobinHood = this.toggleRobinHood.bind(this);
+        this.toggleStealGem = this.toggleStealGem.bind(this);
+        this.toggleStealCard = this.toggleStealCard.bind(this);
     }
 
     componentDidMount() {
         this.populateCards();
     }
+
+    toggleSelfHug() {
+        this.setState({
+            selfhug: true,
+            robinhood: false,
+            stealgem: false,
+            stealcard: false
+        })
+    }
+
+    toggleRobinHood() {
+        this.setState({
+            selfhug: false,
+            robinhood: true,
+            stealgem: false,
+            stealcard: false
+        })
+    }
+
+    toggleStealGem() {
+        this.setState({
+            selfhug: false,
+            robinhood: false,
+            stealgem: true,
+            stealcard: false
+        })
+    }
+
+    toggleStealCard() {
+        this.setState({
+            selfhug: false,
+            robinhood: false,
+            stealgem: false,
+            stealcard: true
+        })
+    }
+
 
     renderCards() {
         let currentUserGuid = "31c2d99f-567f-4024-a997-b5b9ab8ecd54";
@@ -25,17 +72,17 @@ export class CardPage extends Component {
                 var cardToReturn; 
                 switch (card.cardType) {
                     case 0:
-                        cardToReturn = <img src={SelfHug} />
+                        cardToReturn = <button onClick={this.toggleSelfHug}><img src={SelfHug} /></button>
                         break;
                     case 1:
-                        cardToReturn = <img src={RobinHood}/>
+                        cardToReturn = <button onClick={this.toggleRobinHood}><img src={RobinHood} /></button>
                         break;
                     case 2:
-                        cardToReturn = <img src={StealGem} />
-                        break;
+                        cardToReturn = <button onClick={this.toggleStealGem}><img src={StealGem} /></button>
+                    break;
                     case 3:
-                        cardToReturn = <img src={StealCard} />
-                        break;
+                        cardToReturn = <button onClick={this.toggleStealCard}><img src={StealCard} /></button>
+                    break;
                 }
 
                 return cardToReturn; 
@@ -51,13 +98,57 @@ export class CardPage extends Component {
 
         return (
             <>
-                {contents}
-            </>
+                <div class="centered">
+                    {contents}       
+                </div>
+                <br/><br/>
+                {this.state.selfhug &&
+                    <>
+                        <div class="centered">
+                        <form class="form-inline">
+                        <label class="mr-sm-2" for="selfHugInputGems"><strong>Gems to give yourself:</strong></label>
+                        <input type="number" id="selfHugInputGems" placeholder={0}/>
+                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        </form>
+                        </div>
+                    </>
+                }
+                {this.state.robinhood && 
+                    <div class="centered">
+                        <form class="form-inline">
+                            <label class="mr-sm-2" for="stealFromInput"><strong>Steal gem from:</strong></label>
+                            <input class="mr-sm-2" type="string" id="stealFromInput" />
+                            <label class="mr-sm-2" for="giveToInput"><strong>Give gem to:</strong></label>
+                            <input type="string" id="giveToInput" />
+                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        </form>
+                    </div>
+                }
+                {this.state.stealgem && 
+                    <div class="centered">
+                        <form class="form-inline">
+                            <label class="mr-sm-2" for="stealGemInput"><strong>Steal gem from:</strong></label>
+                            <input type="string" id="stealGemInput" />
+                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        </form>
+                    </div>}
+                {this.state.stealcard && 
+                    <div class="centered">
+                        <form class="form-inline">
+                            <label class="mr-sm-2" for="stealCardInput"><strong>Steal card from:</strong></label>
+                            <input type="string" id="stealCardInput" />
+                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        </form>
+                    </div>
+                }
+                </>
+
+           
         );
     }
 
     async populateCards() {
-        const response = await fetch('api/card', {
+        const cardResponse = await fetch('api/card', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -65,10 +156,22 @@ export class CardPage extends Component {
             }
         });
 
-        const data = await response.json();
+        const cardData = await cardResponse.json();
 
+        const userResponse = await fetch('api/user', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const userData = await userResponse.json();
+
+        
         this.setState({
-            cards: data,
+            cards: cardData,
+            users: userData,
             loading: false
         });
     }

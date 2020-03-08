@@ -99,7 +99,6 @@ namespace GemManager.Controllers
         public ActionResult Get()
         {
             var users = _userRepository.GetAll();
-            _mediator.Send(new IdentifyCards());
             
             return Ok(users);
         }

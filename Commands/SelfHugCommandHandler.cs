@@ -28,7 +28,8 @@ namespace GemManager.Commands
         {
             var gemsList = new List<Gem>();
 
-            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
+            // ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
+            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
 
             var user = _userRepository.GetById(userGuid);
 
