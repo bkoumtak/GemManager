@@ -67,5 +67,31 @@ namespace GemManager.Controllers
             var cardType = (CardType)Int32.Parse(card);
             return await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
         }
+        
+        [Route("double_receive/{target}")]
+        public async Task<bool> DoubleReceive(string target)
+        {
+            var targetGuid = Guid.Parse(target);
+
+            return await _mediator.Send(new DoubleReceiveCommand(Request, targetGuid));
+        }
+
+        [Route("double_send")]
+        public async Task<bool> DoubleSend()
+        {
+            return await _mediator.Send(new DoubleSendCommand(Request));
+        }
+
+        [Route("revive")]
+        public async Task<bool> Revive()
+        {
+            return await _mediator.Send(new ReviveCommand(Request));
+        }
+
+        [Route("malediction")]
+        public async Task<bool> Malediction(string source, string target)
+        {
+            return await _mediator.Send(new MaledictionCommand(Request, Guid.Parse(source), Guid.Parse(target)));
+        }
     }
 }

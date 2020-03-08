@@ -10,10 +10,9 @@ namespace GemManager.Models
         [BsonId]
         public Guid Id { get; set; }
         public int Week { get; set; }
-
         [BsonRef(DbCollectionName.User)]
         public User Owner { get; set; }
-
+        public bool IsActive { get; set; }
         public CardType CardType { get; set; }
     }
 }
