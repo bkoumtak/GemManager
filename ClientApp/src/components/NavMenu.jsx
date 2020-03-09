@@ -101,18 +101,17 @@ export class NavMenu extends Component {
                                                 Gems Sent
                                             </NavLink>
                                         </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/card-page">
+                                                Cards
+                                            </NavLink>
+                                        </Dropdown.Item>
 
                                         <Dropdown.Item onClick={this.logout}><NavLink>Logout</NavLink></Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                     </>
                 }
-                        <Dropdown.Item>
-                            <NavLink tag={Link} className="text-dark" to="/card-page">
-                                Cards
-                                        </NavLink>
-                        </Dropdown.Item>
-
                         </ul>
                     </Collapse>
                 </Container>

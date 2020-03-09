@@ -27,8 +27,7 @@ namespace GemManager.Commands
             var sourceUserGems = _gemRepository.GetByUser(request.Source);
             var targetUserGems = _gemRepository.GetByUser(request.Target);
 
-            // ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
 
             if (!sourceUserGems.Any())
                 return Task.FromResult(false);
@@ -44,7 +43,7 @@ namespace GemManager.Commands
             if (sourceUserGemsList.Count > targetUserGemsList.Count)
             {
                 var gem = sourceUserGemsList[0];
-                gem.Message += "[Originally to " + gem.To.Name + "]";
+                gem.Message += " \n [Originally to " + gem.To.FirstName + "]";
                 gem.To.Id = request.Target;
                 _gemRepository.Save(gem);
 
