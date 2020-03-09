@@ -43,7 +43,7 @@ namespace GemManager.Commands
             if (sourceUserGemsList.Count > targetUserGemsList.Count)
             {
                 var gem = sourceUserGemsList[0];
-                gem.Message += "[Originally to " + gem.To.Name + "]";
+                gem.Message += " \n [Originally to " + gem.To.FirstName + "]";
                 gem.To.Id = request.Target;
                 _gemRepository.Save(gem);
 

@@ -106,12 +106,12 @@ export class NavMenu extends Component {
                                                 Cards
                                             </NavLink>
                                         </Dropdown.Item>
+
                                         <Dropdown.Item onClick={this.logout}><NavLink>Logout</NavLink></Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                     </>
                 }
-                            
                         </ul>
                     </Collapse>
                 </Container>

@@ -33,6 +33,7 @@ namespace GemManager.Commands
             else
             {
                 ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
+
                 var user = _userRepository.GetById(userGuid);
 
                 var userCards = _cardRepository.GetByUserAndCardType(userGuid, CardType.STEAL_CARD);
