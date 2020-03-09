@@ -10,6 +10,10 @@ namespace GemManager.Enumerations
         SELF_HUG,
         ROBIN_HOOD,
         STEAL_GEM, 
-        STEAL_CARD
+        STEAL_CARD, 
+        REVIVE,
+        DOUBLE_RECEIVE,
+        DOUBLE_GIVE,
+        MALEDICTION
     }
 }
