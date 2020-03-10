@@ -3,6 +3,7 @@ import SelfHug from '../imgs/selfhug.png'
 import RobinHood from '../imgs/robinhood.png';
 import StealGem from '../imgs/stealgem.png';
 import StealCard from '../imgs/stealcard.png'; 
+import Revive from '../imgs/revive.png'; 
 import { authenticationService } from '../_services/authentication.service';
 import { authHeader } from '../_helpers';
 
@@ -107,6 +108,21 @@ export class CardPage extends Component {
     }
 
     /* Call your backend here */
+    async reviveHandler() {
+        await fetch('api/card/revive', {
+            method: 'GET',
+            headers: {
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
+            }
+        }).then(
+            window.location.reload()
+        );
+    }
+
     async selfHugHandler() {
         let gems = this.state.formControls.shGems.value; 
         await fetch('api/card/self_hug/' + gems, {
@@ -189,6 +205,11 @@ export class CardPage extends Component {
                     case 3:
                         cardToReturn = <button key={index} onClick={this.toggleStealCard}><img src={StealCard} /></button>
                         break;
+                    case 6:
+                        cardToReturn = <button key={index} onClick={this.reviveHandler.bind(this)}><img src={Revive} /></button>
+                        break;
+                    default:
+                        break;
                     /* Add your images here */ 
                 }
 
@@ -201,9 +222,9 @@ export class CardPage extends Component {
 
     render() {
         let contents = this.state.loading 
-            ? <p><em>Loading...</em></p> : this.renderCards(); 
+            ? <p><em>Loading...</em></p> : this.renderCards();
 
-        let currentUserGuid = this.state.currentUser.id; 
+        let currentUserGuid = authenticationService.currentUserValue.id; 
 
         let dropdownList = this.state.users.map((user, index) => {
             if (user.id != currentUserGuid)
@@ -218,7 +239,7 @@ export class CardPage extends Component {
         /* Render your cards and forms here */
         return (
             <>
-                <div class="centered">
+                <div className="centered">
                     {contents}       
                 </div>
                 <br/><br/>

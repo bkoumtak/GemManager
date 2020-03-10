@@ -91,23 +91,17 @@ export class NavMenu extends Component {
                               {currentUser.username}
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
-                                        <Dropdown.Item>
-                                            <NavLink tag={Link} className="text-dark" to="/gems-received-page">
+                                        <Dropdown.Item className="text-dark" href="/gems-received-page">
                                                 Gems Received
-                                            </NavLink>
                                         </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <NavLink tag={Link} className="text-dark" to="/gems-sent-page">
+                                        <Dropdown.Item className="text-dark" href="/gems-sent-page">
                                                 Gems Sent
-                                            </NavLink>
                                         </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <NavLink tag={Link} className="text-dark" to="/card-page">
+                                        <Dropdown.Item className="text-dark" href="/card-page">
                                                 Cards
-                                            </NavLink>
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item onClick={this.logout}><NavLink>Logout</NavLink></Dropdown.Item>
+                                        <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                     </>

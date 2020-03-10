@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GemManager.Controllers;
 using GemManager.Repositories;
 using GemManager.Models;
 using GemManager.Enumerations;
@@ -26,7 +27,7 @@ namespace GemManager.Commands
         public Task<bool> Handle(ReviveCommand request, CancellationToken cancellationToken)
         {
             var gemsList = new List<Gem>();
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
             var user = _userRepository.GetById(userGuid);
 
             var cardsOfUser = _cardRepository.GetByUserAndCardType(userGuid, CardType.REVIVE); 
@@ -40,8 +41,11 @@ namespace GemManager.Commands
 
             if (graveyardGems.Count() > 0)
             {
-                
-                _gemRepository.Save(graveyardGems.FirstOrDefault(x => x.To.Id == user.Id));
+                var firstGemFromGraveyard = graveyardGems.FirstOrDefault();
+
+                firstGemFromGraveyard.To.Id = user.Id;
+
+                _gemRepository.Save(firstGemFromGraveyard);
                 
                 var card = cardsOfUser.FirstOrDefault();
                 _cardRepository.Delete(card.Id);
