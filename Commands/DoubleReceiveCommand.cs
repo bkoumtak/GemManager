@@ -11,11 +11,13 @@ namespace GemManager.Commands
     {
         public Guid Target { get; }
         public HttpRequest Request { get; }
+        public int Week { get; set; }
 
-        public DoubleReceiveCommand(HttpRequest request, Guid target)
+        public DoubleReceiveCommand(HttpRequest request, Guid target, int week)
         {
             Request = request;
             Target = target;
+            Week = week;
         }
     }
 }

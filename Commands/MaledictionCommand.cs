@@ -9,15 +9,15 @@ namespace GemManager.Commands
 {
     public class MaledictionCommand : IRequest<bool>
     {
-        public Guid Source { get; }
+        public int Week { get; }
         public Guid Target { get; }
         public HttpRequest Request { get; }
 
-        public MaledictionCommand (HttpRequest request, Guid source, Guid target)
+        public MaledictionCommand (HttpRequest request, Guid target, int week)
         {
             Request = request;
-            Source = source;
             Target = target;
+            Week = week;
         }
 
     }

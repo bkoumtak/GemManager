@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GemManager.Controllers;
 using GemManager.Repositories;
 using GemManager.Models;
 using GemManager.Enumerations;
@@ -25,10 +26,9 @@ namespace GemManager.Commands
 
         public Task<bool> Handle(DoubleSendCommand request, CancellationToken cancellationToken)
         {
-            var gemsList = new List<Gem>();
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
             var user = _userRepository.GetById(userGuid);
-            
+
             var cardsOfUser = _cardRepository.GetByUserAndCardType(userGuid, CardType.DOUBLE_SEND); 
 
             if (!cardsOfUser.Any())
@@ -36,8 +36,9 @@ namespace GemManager.Commands
                 return Task.FromResult(false);
             }
             
-            if (user.GemsToGive > 0)
+            if (user.GemsToGive >= 0)
             {
+                user.GemsToGive = user.GemsToGive > 0 ? user.GemsToGive : 1;
                 user.GemsToGive *= 2;
                 _userRepository.Save(user);
 
@@ -45,16 +46,6 @@ namespace GemManager.Commands
                 _cardRepository.Delete(card.Id);
                 
                 return Task.FromResult(true); 
-            }
-            else if (user.GemsToGive == 0)
-            {
-                user.GemsToGive = 1 * 2;
-                _userRepository.Save(user);
-
-                var card = cardsOfUser.FirstOrDefault();
-                _cardRepository.Delete(card.Id);
-
-                return Task.FromResult(true);
             }
             else
             {

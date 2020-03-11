@@ -26,7 +26,6 @@ namespace GemManager.Commands
 
         public Task<bool> Handle(ReviveCommand request, CancellationToken cancellationToken)
         {
-            var gemsList = new List<Gem>();
             ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
             var user = _userRepository.GetById(userGuid);
 
@@ -39,7 +38,7 @@ namespace GemManager.Commands
 
             var graveyardGems = _gemRepository.GetByUser(Guid.Parse("0a9c40cd-34f5-439c-ad3c-0946aea1e5ea"));
 
-            if (graveyardGems.Count() > 0)
+            if (graveyardGems.Any())
             {
                 var firstGemFromGraveyard = graveyardGems.FirstOrDefault();
 

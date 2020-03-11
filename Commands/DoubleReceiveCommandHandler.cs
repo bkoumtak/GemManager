@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GemManager.Controllers;
 using GemManager.Repositories;
 using GemManager.Models;
 using GemManager.Enumerations;
@@ -26,7 +27,7 @@ namespace GemManager.Commands
         public Task<bool> Handle(DoubleReceiveCommand request, CancellationToken cancellationToken)
         {
             var gemsList = new List<Gem>();
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
             var user = _userRepository.GetById(userGuid);
             var userTarget = _userRepository.GetById(request.Target);
             
@@ -37,7 +38,7 @@ namespace GemManager.Commands
                 return Task.FromResult(false);
             }
 
-            var receivedGemsFromTargetThisWeek = _gemRepository.GetByWeek(cardsOfUser.SingleOrDefault().Week).Select(x => x.From.Id == userTarget.Id);
+            var receivedGemsFromTargetThisWeek = _gemRepository.GetByWeek(request.Week).Where(x => x.From.Id == userTarget.Id);
 
             if (receivedGemsFromTargetThisWeek.Any())
             {

@@ -4,20 +4,26 @@ import RobinHood from '../imgs/robinhood.png';
 import StealGem from '../imgs/stealgem.png';
 import StealCard from '../imgs/stealcard.png'; 
 import Revive from '../imgs/revive.png'; 
+import DoubleReceive from '../imgs/doubleReceive.png'; 
+import DoubleSend from '../imgs/doubleSend.png'; 
+import Malediction from '../imgs/malediction.png'; 
 import { authenticationService } from '../_services/authentication.service';
 import { authHeader } from '../_helpers';
+import { getWeekSince } from '../_helpers/week-helper';
 
 export class CardPage extends Component {
     constructor(props) {
-        super(props); 
+        super(props);
         this.state = {
             cards: [],
             users: [],
             loading: true,
             selfhug: false,
-            robinhood: false, 
+            robinhood: false,
             stealgem: false,
             stealcard: false,
+            doublereceive: false,
+            malediction: false,
             formControls: {
                 shGems: {
                     value: 0
@@ -36,6 +42,12 @@ export class CardPage extends Component {
                 },
                 scType: {
                     value: 0
+                },
+                drTarget: {
+                    value: 0
+                },
+                mTarget: {
+                    value: 0
                 }
                 /* Add your form control change variables here */
             }
@@ -45,6 +57,8 @@ export class CardPage extends Component {
         this.toggleRobinHood = this.toggleRobinHood.bind(this);
         this.toggleStealGem = this.toggleStealGem.bind(this);
         this.toggleStealCard = this.toggleStealCard.bind(this);
+        this.toggleDoubleReceive = this.toggleDoubleReceive.bind(this);
+        this.toggleMalediction = this.toggleMalediction.bind(this);
 
         /* Bind your handler */ 
 
@@ -61,7 +75,9 @@ export class CardPage extends Component {
             selfhug: true,
             robinhood: false,
             stealgem: false,
-            stealcard: false
+            stealcard: false,
+            doublereceive: false,
+            malediction: false
         })
     }
 
@@ -70,7 +86,9 @@ export class CardPage extends Component {
             selfhug: false,
             robinhood: true,
             stealgem: false,
-            stealcard: false
+            stealcard: false,
+            doublereceive: false,
+            malediction: false
         })
     }
 
@@ -79,7 +97,9 @@ export class CardPage extends Component {
             selfhug: false,
             robinhood: false,
             stealgem: true,
-            stealcard: false
+            stealcard: false,
+            doublereceive: false,
+            malediction: false
         })
     }
 
@@ -88,8 +108,32 @@ export class CardPage extends Component {
             selfhug: false,
             robinhood: false,
             stealgem: false,
-            stealcard: true
+            stealcard: true,
+            doublereceive: false,
+            malediction: false
         })
+    }
+
+    toggleDoubleReceive() {
+        this.setState({
+            selfhug: false,
+            robinhood: false,
+            stealgem: false,
+            stealcard: false,
+            doublereceive: true,
+            malediction: false
+        })
+    }
+
+    toggleMalediction() {
+        this.setState({
+            selfhug: false,
+            robinhood: false,
+            stealgem: false,
+            stealcard: false,
+            doublereceive: false,
+            malediction: true
+    })
     }
 
     changeHandler(e) {
@@ -108,6 +152,59 @@ export class CardPage extends Component {
     }
 
     /* Call your backend here */
+    async maledictionHandler() {
+        let targetIndex = this.state.formControls.mTarget.value;
+        let target = this.state.users[targetIndex];
+
+        await fetch('api/card/malediction/' + target.id + '/' + getWeekSince(),
+            {
+                method: 'GET',
+                headers: {
+                    ...{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
+                }
+            }).then(
+            window.location.reload()
+        );
+    }
+
+    async doubleSendHandler() {
+        await fetch('api/card/double_send/',
+            {
+                method: 'GET',
+                headers: {
+                    ...{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
+                }
+            }).then(
+            window.location.reload()
+        );
+    }
+
+    async doubleReceiveHandler() {
+        let targetIndex = this.state.formControls.drTarget.value;
+        let target = this.state.users[targetIndex]; 
+
+        await fetch('api/card/double_receive/' + target.id + '/' + getWeekSince(), {
+            method: 'GET',
+            headers: {
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
+            }
+        }).then(
+            window.location.reload()
+        );
+    }
+
     async reviveHandler() {
         await fetch('api/card/revive', {
             method: 'GET',
@@ -205,8 +302,17 @@ export class CardPage extends Component {
                     case 3:
                         cardToReturn = <button key={index} onClick={this.toggleStealCard}><img src={StealCard} /></button>
                         break;
+                    case 4:
+                        cardToReturn = <button key={index} onClick={this.toggleDoubleReceive.bind(this)}><img src={DoubleReceive} /></button>
+                        break;
+                    case 5:
+                        cardToReturn = <button key={index} onClick={this.doubleSendHandler.bind(this)}><img src={DoubleSend} /></button>
+                        break;
                     case 6:
                         cardToReturn = <button key={index} onClick={this.reviveHandler.bind(this)}><img src={Revive} /></button>
+                        break;
+                    case 7:
+                        cardToReturn = <button key={index} onClick={this.toggleMalediction.bind(this)}><img src={Malediction} /></button>
                         break;
                     default:
                         break;
@@ -228,10 +334,10 @@ export class CardPage extends Component {
 
         let dropdownList = this.state.users.map((user, index) => {
             if (user.id != currentUserGuid)
-                return <option key={index} value={index}>{user.firstName}</option>
+                return <option key={index} value={index}>{user.name}</option>
         });
 
-        const cardNames = ["Self Hug", "Robin Hood", "Steal Gem", "Steal Card", "Revive", "Double Receive", "Double Give", "Malediction"]; 
+        const cardNames = ["Self Hug", "Robin Hood", "Steal Gem", "Steal Card", "Revive", "Double Receive", "Double Send", "Malediction"]; 
         let cardDropdownList = cardNames.map((card, index) => {
             return <option key={index} value={index}>{card}</option>
         });
@@ -242,7 +348,31 @@ export class CardPage extends Component {
                 <div className="centered">
                     {contents}       
                 </div>
-                <br/><br/>
+                <br /><br />
+                {this.state.malediction &&
+                    <div class="centered">
+                        <form class="form-inline">
+                            <label class="mr-sm-2" for="maledictionForInput"><strong>Cast a spell on:</strong></label>
+                        <select className="form-control mr-sm-2" id="maledictionForInput"
+                                name="mTarget" value={this.state.formControls.mTarget.value} onChange={this.changeHandler}>
+                                {dropdownList}
+                            </select>
+                            <button type="submit" class="btn btn-primary mb-2" onClick={this.maledictionHandler.bind(this)}>Submit</button>
+                        </form>
+                    </div>
+                }
+                {this.state.doublereceive &&
+                    <div class="centered">
+                        <form class="form-inline">
+                            <label class="mr-sm-2" for="doubleFromInput"><strong>Double the number of gems from:</strong></label>
+                            <select className="form-control mr-sm-2" id="doubleFromInput"
+                                name="drTarget" value={this.state.formControls.drTarget.value} onChange={this.changeHandler}>
+                                {dropdownList}
+                            </select>                            
+                            <button type="submit" class="btn btn-primary mb-2" onClick={this.doubleReceiveHandler.bind(this)}>Submit</button>
+                        </form>
+                    </div>
+                }
                 {this.state.selfhug &&
                     <>
                         <div class="centered">

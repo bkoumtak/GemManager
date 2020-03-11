@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using System.Threading.Tasks;
 using System;
@@ -68,12 +68,12 @@ namespace GemManager.Controllers
             return await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
         }
         
-        [Route("double_receive/{target}")]
-        public async Task<bool> DoubleReceive(string target)
+        [Route("double_receive/{target}/{week}")]
+        public async Task<bool> DoubleReceive(string target, int week)
         {
             var targetGuid = Guid.Parse(target);
 
-            return await _mediator.Send(new DoubleReceiveCommand(Request, targetGuid));
+            return await _mediator.Send(new DoubleReceiveCommand(Request, targetGuid, week));
         }
 
         [Route("double_send")]
@@ -88,10 +88,10 @@ namespace GemManager.Controllers
             return await _mediator.Send(new ReviveCommand(Request));
         }
 
-        [Route("malediction")]
-        public async Task<bool> Malediction(string source, string target)
+        [Route("malediction/{target}/{week}")]
+        public async Task<bool> Malediction(string target, int week)
         {
-            return await _mediator.Send(new MaledictionCommand(Request, Guid.Parse(source), Guid.Parse(target)));
+            return await _mediator.Send(new MaledictionCommand(Request, Guid.Parse(target), week));
         }
     }
 }

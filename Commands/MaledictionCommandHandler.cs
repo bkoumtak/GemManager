@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GemManager.Controllers;
 using GemManager.Enumerations;
 using GemManager.Repositories;
 using GemManager.Models;
@@ -23,8 +24,8 @@ namespace GemManager.Commands
 
         public Task<bool> Handle(MaledictionCommand request, CancellationToken cancellationToken)
         {
-            var userGuid = Guid.Parse("31c2d99f-567f-4024-a997-b5b9ab8ecd54");
-
+            ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole);
+            
             var cardsOfUser = _cardRepository.GetByUserAndCardType(userGuid, CardType.MALEDICTION);
 
             if (!cardsOfUser.Any())
@@ -34,7 +35,7 @@ namespace GemManager.Commands
 
             var card = cardsOfUser.FirstOrDefault();
 
-            var targetUserGemsFromCurrentWeek = _gemRepository.GetByUser(request.Target).Where(x => x.Week == 10).ToList();
+            var targetUserGemsFromCurrentWeek = _gemRepository.GetByUser(request.Target).Where(x => x.Week == request.Week).ToList();
 
             if (targetUserGemsFromCurrentWeek.Any())
             {
@@ -45,17 +46,10 @@ namespace GemManager.Commands
                     
                     _gemRepository.Save(gem);
                 }
-
-                card.IsActive = true;
-
-                return Task.FromResult(true); 
             }
-            else
-            {
-                card.IsActive = true;
-
-                return Task.FromResult(true);
-            }
+            card.IsActive = true;
+            _cardRepository.Save(card);
+            return Task.FromResult(true);
         }
     }
 }
