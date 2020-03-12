@@ -47,7 +47,10 @@ namespace GemManager.Commands
                     _gemRepository.Save(gem);
                 }
             }
+
             card.IsActive = true;
+            card.TargetPlayerGuid = request.Target;
+            card.Week = request.Week;
             _cardRepository.Save(card);
             return Task.FromResult(true);
         }

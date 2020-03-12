@@ -13,6 +13,7 @@ namespace GemManager.Models
         [BsonRef(DbCollectionName.User)]
         public User Owner { get; set; }
         public bool IsActive { get; set; }
+        public Guid TargetPlayerGuid { get; set; }
         public CardType CardType { get; set; }
     }
 }
