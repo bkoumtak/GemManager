@@ -4,7 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using GemManager.Commands;
+using GemManager.Enumerations;
 using GemManager.Helpers;
 using GemManager.Models;
 using GemManager.Repositories;
@@ -94,7 +96,7 @@ namespace GemManager.Controllers
             }
             return BadRequest(new { message = "Username or password is incorrect" });
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Get()
         {
@@ -145,6 +147,23 @@ namespace GemManager.Controllers
             _userRepository.Save(usersFromDbWith2Gems);
 
             return Ok();
+        }
+
+        [Route("gamble/{target}/{card}/{week}/{lost}")]
+        public async Task<bool> Gamble(string target, string card, string week, string lost)
+        {
+            ValidationHelper.ValidateUser(Request, out var userGuid, out var userRole);
+            if (userRole == "Admin")
+            {
+                var targetGuid = Guid.Parse(target);
+                var cardType = (CardType)Int32.Parse(card);
+                var currentWeek = Int32.Parse(week);
+                var gemsLost = Int32.Parse(lost);
+
+                return await _mediator.Send(new GambleCommand(Request, targetGuid, cardType, currentWeek, gemsLost));
+            }
+
+            return false;
         }
     }
 }

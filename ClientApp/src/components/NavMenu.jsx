@@ -82,7 +82,12 @@ export class NavMenu extends Component {
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark" to="/user-management">
                                                 User Management
-                                     </NavLink>
+                                             </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/dice-page">
+                                                Gamble
+                                            </NavLink>
                                         </NavItem>
                                     </>
                                 }
@@ -105,7 +110,8 @@ export class NavMenu extends Component {
                           </Dropdown.Menu>
                         </Dropdown>
                     </>
-                }
+                            }
+                            
                         </ul>
                     </Collapse>
                 </Container>

@@ -14,6 +14,7 @@ import { GemsReceived } from './components/GemsReceived';
 import { GemsSent } from './components/GemsSent';
 import { WeekDisplay } from './components/WeekDisplay';
 import { CardPage } from './components/CardPage';
+import { DicePage } from './components/DicePage';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -29,6 +30,7 @@ export default class App extends Component {
             <PrivateRoute path='/user-page' component={UserPage} />
             <PrivateRoute path='/gems-received-page' component={GemsReceived} />
             <PrivateRoute path='/gems-sent-page' component={GemsSent} />
+            <PrivateRoute path='/dice-page' roles={[Role.Admin]} component={DicePage} />
             <PrivateRoute path='/user-management' roles={[Role.Admin]} component={UserManagement} />
           </Layout>
       </>
