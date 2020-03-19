@@ -10,6 +10,7 @@ import DoubleSend from '../imgs/doubleSend.png';
 import Revive from '../imgs/revive.png'; 
 import Malediction from '../imgs/malediction.png'; 
 import { getWeekSince } from '../_helpers/week-helper';
+import { authHeader } from '../_helpers';
 
 export class DicePage extends React.Component {
     userIndex = 0; 
@@ -23,7 +24,7 @@ export class DicePage extends React.Component {
             userIndex: 0,
             diceRoll: 0,
             lostGems: 0,
-            canPlay: true
+            canPlay: false
         };
 
         this.rollDoneCallback = this.rollDoneCallback.bind(this);
@@ -170,22 +171,17 @@ export class DicePage extends React.Component {
 
         let random = Math.round(Math.random() * 7 + 1)
         console.log(random); 
-        this.setState({
-            cardNumber: random,
-            diceRoll: num,
-            userIndex: this.userIndex
-        });   
 
-        this.gamble();
+        this.gamble(random, num);
     }
 
-    async gamble() {
-        let index = this.state.userIndex; 
+    async gamble(random, num) {
+        let index = this.userIndex; 
         let user = this.state.users[index]; 
-        let card = this.state.cardNumber;
+        let card = random;
         if (card > 0)
             card = card - 1; 
-        let roll = this.state.diceRoll; 
+        let roll = num; 
 
         var gemsLost; 
 
@@ -215,7 +211,10 @@ export class DicePage extends React.Component {
         }).then(data => data.json())
             .then(bool => {
                 this.setState({
-                    canPlay: bool
+                    cardNumber: random,
+                    diceRoll: num,
+                    canPlay: bool,
+                    userIndex: this.userIndex
                 });
             });
     }
@@ -223,8 +222,11 @@ export class DicePage extends React.Component {
         const response = await fetch('api/user', {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
             }
         });
 
