@@ -163,7 +163,7 @@ namespace GemManager.Controllers
                 return await _mediator.Send(new GambleCommand(Request, targetGuid, cardType, currentWeek, gemsLost));
             }
 
-            return false;
+            return await Task.FromResult(false);
         }
     }
 }
