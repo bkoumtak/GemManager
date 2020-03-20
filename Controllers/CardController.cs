@@ -6,9 +6,11 @@ using GemManager.Commands;
 using GemManager.Models;
 using GemManager.Repositories;
 using GemManager.Enumerations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GemManager.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CardController : ControllerBase
@@ -33,8 +35,14 @@ namespace GemManager.Controllers
         [HttpPost]
         public ActionResult Post(Card card)
         {
-            _cardRepository.Save(card);
-            return Ok();
+            ValidationHelper.ValidateUser(Request, out var userGuid, out var userRole);
+            if (userRole == "Admin")
+            {
+                _cardRepository.Save(card);
+                return Ok();
+            }
+
+            return Unauthorized();
         }
 
         [Route("robin_hood/{source}/{target}")]
