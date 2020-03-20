@@ -21,13 +21,21 @@ export class GemsReceived extends React.Component {
         });
     }
 
+    sortGemsWeek(a, b) {
+        if (a.week > b.week) return 1;
+        if (a.week < b.week) return -1;
+        return 0;
+    }
+
     renderGems() {
         let currentUser = authenticationService.currentUserValue;
 
         var content; 
         var i = 0; 
 
-        var list = this.state.gems.map(gem => {
+        var sortedGems = this.state.gems.sort(this.sortGemsWeek); 
+
+        var list = sortedGems.map(gem => {
 
             if (gem.to.id == currentUser.id) {
                 let button = <button className="btn btn-squared-default btn-info mb-1 " onClick={this.displayMessage.bind(this,
