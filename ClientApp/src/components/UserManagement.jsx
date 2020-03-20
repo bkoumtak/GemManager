@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { authHeader, handleResponse } from '../_helpers';
+import { v4 as uuidv4 } from 'uuid'; 
+import { getWeekSince } from '../_helpers/week-helper';
 
 export class UserManagement extends Component {
     static displayName = UserManagement.name;
@@ -9,6 +11,8 @@ export class UserManagement extends Component {
         this.state = {
             users: [],
             loading: true,
+            userIndex: 0,
+            cardIndex: 0,
             addOrSubstractRocks: (id, operation) => {
                 const users = this.state.users.slice();
 
@@ -67,16 +71,78 @@ export class UserManagement extends Component {
         );
     }
 
+    toUserChangeHandler(e) {
+        let id = e.target.value;
+
+        this.setState({
+            userIndex: id
+        });
+    }
+
+    cardChangeHandler(e) {
+        let cardId = e.target.value;
+
+        this.setState({
+            cardIndex: cardId
+        });
+    }
+
+    async addCard() {
+        await fetch('api/card/', {
+            method: 'POST',
+            headers: {
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
+            },
+            body: JSON.stringify({
+                id: uuidv4(),
+                week: getWeekSince(),
+                owner: this.state.users[this.state.userIndex],
+                cardType: parseInt(this.state.cardIndex)
+            })
+        })
+
+        alert("Card submitted to user: " + this.state.users[this.state.userIndex].firstName); 
+    }
+
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : UserManagement.renderUsers(this.state.users, this.state.addOrSubstractRocks);
 
+        let userList = this.state.users.map((user, index) => {
+            if (user.role != "admin") {
+                return <option key={index} value={index}>{user.firstName}</option>
+            }
+        });
+
+        let cardNames = ["Self Hug", "Robin Hood", "Steal Gem", "Steal Card", "Double Receive", "Double Send", "Revive", "Malediction"];
+
+        let cardList = cardNames.map((card, index) => {
+            return <option key={index} value={index}>{card}</option>
+        });
+
         return (
             <div>
                 <div className="row">
-                    <div className="col-9">
+                    <div className="col-3">
                         <h1 id="tabelLabel">User Management</h1>
+                    </div>
+                    <div className="col-2">
+                        <select className="form-control" onChange={this.toUserChangeHandler.bind(this)}>
+                            {userList}
+                        </select>  
+                    </div> 
+                    <div className="col-2"> 
+                        <select className="form-control" onChange={this.cardChangeHandler.bind(this)}>
+                            {cardList}
+                        </select>  
+                    </div>
+                    <div className="col-2">
+                        <button type="button" className="btn btn-outline-dark" onClick={this.addCard.bind(this)}>Add Card to User</button>
                     </div>
                     <div className="col-3" style={{ textAlign: 'center' }}>
                         <button type="button" className="btn btn-outline-dark" onClick={this.submit.bind(this)}>Add 2 Gems</button>
