@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'; 
 import { authenticationService } from '../_services/authentication.service'; 
 import { getWeekSince } from '../_helpers/week-helper';
-import { authHeader, handleResponse } from '../_helpers';
+import { authHeader, handleCardControllerResponse } from '../_helpers';
 
 export class UserPage extends React.Component {
     constructor(props) {
@@ -50,7 +50,6 @@ export class UserPage extends React.Component {
         let currentUser = this.state.currentUser;
         if (currentUser.gemsToGive > 0) {
             currentUser.gemsToGive -= 1;
-            alert('Submitted rock to ' + this.state.users[this.state.toUserIndex].name);
         }
         else {
             alert("You don't have enough gems to give to " + this.state.users[this.state.toUserIndex].name);
@@ -84,25 +83,29 @@ export class UserPage extends React.Component {
                message: this.state.currentTextMessage
             }),
        })
-        .then(handleResponse)
-        .catch((error) => {
-           alert(error);
+        .then(handleCardControllerResponse)
+        .then(obj => {
+                alert(obj.message + this.state.users[this.state.toUserIndex].name);
+
+                fetch('api/user/' + currentUser.id,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            ...{
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            ...authHeader()
+                        },
+                        body: JSON.stringify({
+                            id: currentUser.id,
+                            gemsToGive: currentUser.gemsToGive
+                        })
+                    });
         })
-        .then(
-            fetch('api/user/' + currentUser.id, {
-            method: 'PUT',
-            headers: {
-                ...{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                ...authHeader()
-            },
-            body: JSON.stringify({
-                id: currentUser.id,
-                gemsToGive: currentUser.gemsToGive
-            })})
-        );
+        .catch((error) => {
+            alert(error);
+        });
     }
 
     renderUserPage(users) {

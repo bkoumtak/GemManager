@@ -510,7 +510,7 @@ export class CardPage extends Component {
     }
 
     async populateCards() {
-        const cardResponse = await fetch('api/card', {
+        const cardResponse = await fetch('api/card/get_all/' + getWeekSince(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

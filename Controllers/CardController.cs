@@ -2,6 +2,7 @@
 using MediatR;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 using GemManager.Commands;
 using GemManager.Models;
 using GemManager.Repositories;
@@ -30,6 +31,27 @@ namespace GemManager.Controllers
         {
             var cards = _cardRepository.GetAll();
 
+            return Ok(cards);
+        }
+
+        [Route("get_all/{week}")]
+        public ActionResult GetAllCardsAndValidateMaledictionCard(int week)
+        {
+            var ActiveMaledictionCards = _cardRepository.GetAll().Where(x => x.IsActive && x.CardType == CardType.MALEDICTION);
+
+            if (ActiveMaledictionCards.Any())
+            {
+                foreach (var activeMaledictionCard in ActiveMaledictionCards)
+                {
+                    if (week > activeMaledictionCard.Week)
+                    {
+                        _cardRepository.Delete(activeMaledictionCard.Id);
+                    }
+                }
+            }
+            
+            var cards = _cardRepository.GetAll();
+            
             return Ok(cards);
         }
 

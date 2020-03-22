@@ -27,11 +27,12 @@ namespace GemManager.Controllers
         public ActionResult Post(Gem gems)
         {
             ValidationHelper.ValidateUser(Request, out var userGuid, out var userRole);
+            string msg = "You have successfully sent the gem(s) to ";
 
             if (userGuid == gems.From.Id) { 
                 var curUser = _userRepository.GetById(gems.From.Id);
 
-                MaledictionCardGemsDivert(gems);
+                msg = MaledictionCardGemsDivert(gems, msg);
 
                 if (curUser.GemsToGive > 0)
                     _gemRepository.Save(gems);
@@ -42,10 +43,11 @@ namespace GemManager.Controllers
             {
                 return BadRequest("The operation is not allowed");
             }
-            return Ok();
+            
+            return Ok(new { message = msg});
         }
 
-        private void MaledictionCardGemsDivert(Gem gems)
+        private string MaledictionCardGemsDivert(Gem gems, string msg)
         {
             var ActiveMaledictionCards = _cardRepository.GetAll().Where(x => x.IsActive && x.CardType == CardType.MALEDICTION);
 
@@ -60,9 +62,14 @@ namespace GemManager.Controllers
                     }
 
                     if (gems.To.Id == activeMaledictionCard.TargetPlayerGuid)
+                    {
                         gems.To = _userRepository.GetAll().SingleOrDefault(x => x.Name == "Graveyard");
+                        msg = "The gem has been diverted to the graveyard since the user was spelled by the malediction card!";
+                    }
                 }
             }
+
+            return msg;
         }
 
         [HttpGet]
