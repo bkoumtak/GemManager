@@ -30,7 +30,7 @@ namespace GemManager.Commands
 
             if (!cardsOfUser.Any())
             {
-                return Task.FromResult(false);
+                throw new InvalidOperationException("No user cards of specified type have been found");
             }
 
             var card = cardsOfUser.FirstOrDefault();

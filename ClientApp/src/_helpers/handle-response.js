@@ -22,3 +22,20 @@ export function handleResponse(response) {
         return data; 
     }); 
 }
+
+export function handleCardControllerResponse(response) {
+    return response.text().then(text => {
+        const data = text && JSON.parse(text);
+        if (!response.ok) {
+            let error = (data && data.message) || response.statusText;
+
+            if ([400, 409].indexOf(response.status) !== -1) {
+                error = data;
+            }
+
+            return Promise.reject(error);
+        }
+
+        return data;
+    });
+}

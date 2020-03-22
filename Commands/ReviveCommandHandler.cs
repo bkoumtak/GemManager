@@ -33,7 +33,7 @@ namespace GemManager.Commands
 
             if (!cardsOfUser.Any())
             {
-                return Task.FromResult(false);
+                throw new InvalidOperationException("No user cards of specified type have been found");
             }
 
             var graveyardGems = _gemRepository.GetByUser(Guid.Parse("0a9c40cd-34f5-439c-ad3c-0946aea1e5ea"));
