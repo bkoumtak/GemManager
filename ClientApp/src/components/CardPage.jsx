@@ -372,19 +372,19 @@ export class CardPage extends Component {
                         cardToReturn = <button key={index} onClick={this.toggleStealCard}><img src={StealCard} /></button>
                         break;
                     case 4:
-                        cardToReturn = <button key={index} onClick={this.toggleDoubleReceive.bind(this)}><img src={DoubleReceive} /></button>
+                        cardToReturn = <button key={index} onClick={this.toggleDoubleReceive}><img src={DoubleReceive} /></button>
                         break;
                     case 5:
-                        cardToReturn = <button key={index} onClick={this.doubleSendHandler.bind(this)}><img src={DoubleSend} /></button>
+                        cardToReturn = <button key={index} onClick={this.doubleSendHandler}><img src={DoubleSend} /></button>
                         break;
                     case 6:
-                        cardToReturn = <button key={index} onClick={this.reviveHandler.bind(this)}><img src={Revive} /></button>
+                        cardToReturn = <button key={index} onClick={this.reviveHandler}><img src={Revive} /></button>
                         break;
                     case 7:
                         cardToReturn =
                             <button key={index} onClick={card.isActive ?
                                 null:
-                                this.toggleMalediction.bind(this)} style={{ position: 'relative' }}><img src={Malediction} />
+                                this.toggleMalediction} style={{ position: 'relative' }}><img src={Malediction} />
                             {showActivatedBadge}
                         </button>
                         break;
