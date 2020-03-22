@@ -28,7 +28,7 @@ namespace GemManager.Commands
 
             if(!targetCards.Any())
             {
-                return Task.FromResult(false); 
+                throw new InvalidOperationException("No target user cards of specified type have been found");
             }
             else
             {
@@ -50,7 +50,7 @@ namespace GemManager.Commands
                     return Task.FromResult(true);
                 }
 
-                return Task.FromResult(false); 
+                throw new InvalidOperationException("No user cards of specified type have been found");
             }
         }
     }

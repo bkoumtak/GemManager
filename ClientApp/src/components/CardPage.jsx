@@ -263,7 +263,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async robinHoodHandler() {
@@ -280,7 +288,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async stealGemHandler() {
@@ -295,7 +311,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async stealCardHandler() {
@@ -312,7 +336,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
     
     renderCards() {

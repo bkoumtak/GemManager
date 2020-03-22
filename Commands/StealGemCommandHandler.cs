@@ -38,7 +38,7 @@ namespace GemManager.Commands
 
                 var cardsInPossession = _cardRepository.GetByUserAndCardType(userGuid, CardType.STEAL_GEM);
                 if (!cardsInPossession.Any())
-                    return Task.FromResult(false); 
+                    throw new InvalidOperationException("No user cards of specified type have been found");
 
                 gem.Message += "\n Stolen from: " + gem.To.FirstName;
                 gem.To = user;

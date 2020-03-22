@@ -47,34 +47,81 @@ namespace GemManager.Controllers
         }
 
         [Route("robin_hood/{source}/{target}")]
-        public async Task<bool> RobinHood(string source, string target)
+        public async Task<IStatusCodeActionResult> RobinHood(string source, string target)
         {
-            var sourceGuid = Guid.Parse(source);
-            var targetGuid = Guid.Parse(target);
+            try
+            {
+                var sourceGuid = Guid.Parse(source);
+                var targetGuid = Guid.Parse(target);
 
-            return await _mediator.Send(new RobinHoodCommand(Request, sourceGuid, targetGuid));
+                var isOperationSuccessful = await _mediator.Send(new RobinHoodCommand(Request, sourceGuid, targetGuid));
+
+                if (isOperationSuccessful) return Ok(new { message = "You have successfully stolen the gem from the rich and gave to the poor" });
+
+                return Conflict(new { message = "The card has not been played!" });
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         [Route("self_hug/{gems}")]
-        public async Task<bool> SelfHug(string gems)
+        public async Task<IStatusCodeActionResult> SelfHug(string gems)
         {
             var gemsToGive = Int32.Parse(gems);
-            return await _mediator.Send(new SelfHugCommand(Request, gemsToGive)); 
+            
+            try
+            {
+                var isOperationSuccessful = await _mediator.Send(new SelfHugCommand(Request, gemsToGive));
+
+                if (isOperationSuccessful) return Ok(new { message = "You have successfully given a gem to yourself" });
+
+                return Conflict(new { message = "You don't have enough gems to give any yourself!" });
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         [Route("steal_gem/{target}")]
-        public async Task<bool> StealGem(string target)
+        public async Task<IStatusCodeActionResult> StealGem(string target)
         {
-            var targetGuid = Guid.Parse(target); 
-            return await _mediator.Send(new StealGemCommand(Request, targetGuid));
+            try
+            {
+                var targetGuid = Guid.Parse(target);
+
+                var isOperationSuccessful = await _mediator.Send(new StealGemCommand(Request, targetGuid));
+
+                if (isOperationSuccessful) return Ok(new { message = "You have successfully stolen a gem from the team member" });
+
+                return Conflict(new { message = "The selected user doesn't have enoguh gems available" });
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         [Route("steal_card/{target}/{card}")]
-        public async Task<bool> StealCard(string target, string card)
+        public async Task<IStatusCodeActionResult> StealCard(string target, string card)
         {
-            var targetGuid = Guid.Parse(target);
-            var cardType = (CardType)Int32.Parse(card);
-            return await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
+            try
+            {
+                var targetGuid = Guid.Parse(target);
+                var cardType = (CardType)Int32.Parse(card);
+
+                var isOperationSuccessful = await _mediator.Send(new StealCardCommand(Request, targetGuid, cardType));
+
+                if (isOperationSuccessful) return Ok(new { message = "The card has been successfully stolen" });
+
+                return Conflict(new { message = "Something went wrong!" });
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
         
         [Route("double_receive/{target}/{week}")]
