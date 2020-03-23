@@ -35,7 +35,7 @@ namespace GemManager.Commands
 
             if (!cardsOfUser.Any())
             {
-                return Task.FromResult(false);
+                throw new InvalidOperationException("No user cards of specified type have been found");
             }
 
             var receivedGemsFromTargetThisWeek = _gemRepository.GetByWeek(request.Week).Where(x => x.From.Id == userTarget.Id);

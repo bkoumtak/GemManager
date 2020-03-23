@@ -10,6 +10,7 @@ import Malediction from '../imgs/malediction.png';
 import { authenticationService } from '../_services/authentication.service';
 import { authHeader } from '../_helpers';
 import { getWeekSince } from '../_helpers/week-helper';
+import { handleCardControllerResponse } from '../_helpers/handle-response';
 
 export class CardPage extends Component {
     constructor(props) {
@@ -166,13 +167,47 @@ export class CardPage extends Component {
                     },
                     ...authHeader()
                 }
-            }).then(
-            window.location.reload()
-        );
+            })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async doubleSendHandler() {
-        await fetch('api/card/double_send/',
+        var userChoice = window.confirm("Do you really want to play the card?");
+        if (userChoice) {
+            await fetch('api/card/double_send/',
+                    {
+                        method: 'GET',
+                        headers: {
+                            ...{
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            ...authHeader()
+                        }
+                })
+                .then(handleCardControllerResponse)
+                .then(obj => {
+                    alert(obj.message);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        }
+    }
+
+    async doubleReceiveHandler() {
+        let targetIndex = this.state.formControls.drTarget.value;
+        let target = this.state.users[targetIndex]; 
+        
+        await fetch('api/card/double_receive/' + target.id + '/' + getWeekSince(),
             {
                 method: 'GET',
                 headers: {
@@ -182,42 +217,39 @@ export class CardPage extends Component {
                     },
                     ...authHeader()
                 }
-            }).then(
-            window.location.reload()
-        );
-    }
-
-    async doubleReceiveHandler() {
-        let targetIndex = this.state.formControls.drTarget.value;
-        let target = this.state.users[targetIndex]; 
-
-        await fetch('api/card/double_receive/' + target.id + '/' + getWeekSince(), {
-            method: 'GET',
-            headers: {
-                ...{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                ...authHeader()
-            }
-        }).then(
-            window.location.reload()
-        );
+            })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async reviveHandler() {
-        await fetch('api/card/revive', {
-            method: 'GET',
-            headers: {
-                ...{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                ...authHeader()
-            }
-        }).then(
-            window.location.reload()
-        );
+        var userChoice = window.confirm("Do you really want to play the card?");
+        if (userChoice) {
+            await fetch('api/card/revive', {
+                method: 'GET',
+                headers: {
+                    ...{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    ...authHeader()
+                }
+                })
+                .then(handleCardControllerResponse)
+                .then(obj => {
+                    alert(obj.message);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        }
     }
 
     async selfHugHandler() {
@@ -231,7 +263,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async robinHoodHandler() {
@@ -248,7 +288,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async stealGemHandler() {
@@ -263,7 +311,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
 
     async stealCardHandler() {
@@ -280,7 +336,15 @@ export class CardPage extends Component {
                 },
                 ...authHeader()
             }
-        });
+        })
+            .then(handleCardControllerResponse)
+            .then(obj => {
+                alert(obj.message);
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
     }
     
     renderCards() {
@@ -288,7 +352,12 @@ export class CardPage extends Component {
 
         let list = this.state.cards.map((card, index) => {
             if (card.owner.id == currentUserGuid) {
-                var cardToReturn; 
+                var cardToReturn;
+                var showActivatedBadge = <span></span>
+                
+                if (card.cardType == 7 && card.isActive)
+                    showActivatedBadge = <span class="badge badge-success">✔ Activated</span>
+
                 switch (card.cardType) {
                     case 0:
                         cardToReturn = <button key={index} onClick={this.toggleSelfHug}><img src={SelfHug} /></button>
@@ -303,16 +372,21 @@ export class CardPage extends Component {
                         cardToReturn = <button key={index} onClick={this.toggleStealCard}><img src={StealCard} /></button>
                         break;
                     case 4:
-                        cardToReturn = <button key={index} onClick={this.toggleDoubleReceive.bind(this)}><img src={DoubleReceive} /></button>
+                        cardToReturn = <button key={index} onClick={this.toggleDoubleReceive}><img src={DoubleReceive} /></button>
                         break;
                     case 5:
-                        cardToReturn = <button key={index} onClick={this.doubleSendHandler.bind(this)}><img src={DoubleSend} /></button>
+                        cardToReturn = <button key={index} onClick={this.doubleSendHandler}><img src={DoubleSend} /></button>
                         break;
                     case 6:
-                        cardToReturn = <button key={index} onClick={this.reviveHandler.bind(this)}><img src={Revive} /></button>
+                        cardToReturn = <button key={index} onClick={this.reviveHandler}><img src={Revive} /></button>
                         break;
                     case 7:
-                        cardToReturn = <button key={index} onClick={this.toggleMalediction.bind(this)}><img src={Malediction} /></button>
+                        cardToReturn =
+                            <button key={index} onClick={card.isActive ?
+                                null:
+                                this.toggleMalediction} style={{ position: 'relative' }}><img src={Malediction} />
+                            {showActivatedBadge}
+                        </button>
                         break;
                     default:
                         break;
@@ -436,7 +510,7 @@ export class CardPage extends Component {
     }
 
     async populateCards() {
-        const cardResponse = await fetch('api/card', {
+        const cardResponse = await fetch('api/card/get_all/' + getWeekSince(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

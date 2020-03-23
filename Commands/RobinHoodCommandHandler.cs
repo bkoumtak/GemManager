@@ -30,12 +30,12 @@ namespace GemManager.Commands
             ValidationHelper.ValidateUser(request.Request, out var userGuid, out var userRole); 
 
             if (!sourceUserGems.Any())
-                return Task.FromResult(false);
+                throw new InvalidOperationException("The user from whom you want to steal the gems has none available");
 
             var cardsInHand = _cardRepository.GetByUserAndCardType(userGuid, CardType.ROBIN_HOOD);
 
             if (!cardsInHand.Any())
-                return Task.FromResult(false); 
+                throw new InvalidOperationException("No user cards of specified type have been found");
 
             var sourceUserGemsList = sourceUserGems.ToList();
             var targetUserGemsList = targetUserGems.ToList(); 
