@@ -27,7 +27,7 @@ namespace GemManager.Commands
             var targetUserGuid = request.Target;
             var targetUser = _userRepository.GetById(targetUserGuid);
 
-            var gemsList = _gemRepository.GetAll().ToList();
+            var gemsList = _gemRepository.GetByUser(targetUserGuid).ToList();
 
             if (gemsList.Count() < 4) {
                 return Task.FromResult(false); 
