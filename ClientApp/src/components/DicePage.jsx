@@ -115,7 +115,9 @@ export class DicePage extends React.Component {
 
     render() {
         let list = this.state.users.map((user, index) => {
-            return <option key={index} value={index}>{user.firstName}</option>
+            if (user.role === "User") {
+                return <option key={index} value={index}>{user.firstName}</option>
+            }
         }); 
 
         let select = <div>
@@ -205,8 +207,11 @@ export class DicePage extends React.Component {
         await fetch('api/user/gamble/' + user.id + '/' + card + '/' + getWeekSince() + '/' + gemsLost, {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
             }
         }).then(data => data.json())
             .then(bool => {
@@ -218,6 +223,7 @@ export class DicePage extends React.Component {
                 });
             });
     }
+
     async populateUsers() {
         const response = await fetch('api/user', {
             method: 'GET',
