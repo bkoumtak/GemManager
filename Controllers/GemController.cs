@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using GemManager.Enumerations;
 using Microsoft.AspNetCore.Mvc;
 using GemManager.Models;
@@ -14,12 +15,14 @@ namespace GemManager.Controllers
     {
         private readonly IGemRepository _gemRepository;
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Message> _messageRepository;
         private readonly ICardRepository _cardRepository;
 
-        public GemController(IGemRepository gemRepository, IRepository<User> userRepository, ICardRepository cardRepository)
+        public GemController(IGemRepository gemRepository, IRepository<User> userRepository, IRepository<Message> messageRepository, ICardRepository cardRepository)
         {
             _gemRepository = gemRepository;
             _userRepository = userRepository;
+            _messageRepository = messageRepository;
             _cardRepository = cardRepository;
         }
 
@@ -31,7 +34,16 @@ namespace GemManager.Controllers
 
             if (userGuid == gems.From.Id) { 
                 var curUser = _userRepository.GetById(gems.From.Id);
+                var targetUser = _userRepository.GetById(gems.To.Id);
+                var messageLog = new Message
+                {
+                    Id = Guid.NewGuid(),
+                    Title = curUser.FirstName + " gave a gem to " + targetUser.FirstName,
+                    Body = gems.Message,
+                    Week = gems.Week
+                };
 
+                _messageRepository.Save(messageLog);
                 msg = MaledictionCardGemsDivert(gems, msg);
 
                 if (curUser.GemsToGive > 0)

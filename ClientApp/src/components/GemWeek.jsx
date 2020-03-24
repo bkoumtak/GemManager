@@ -1,33 +1,34 @@
 ﻿import React from 'react'; 
+import { authHeader, handleResponse } from '../_helpers';
 
 export class GemWeek extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            gems: [], 
+            messages: [], 
             loading: true
         }
     }
 
     componentDidMount() {
-        this.populateRocks();
+        this.populateMessages();
     }
 
-    renderGems() {
+    renderMessages() {
         var content;
 
         var i;
         var list = [];
-        var gems = this.state.gems; 
-        for (i = 0; i < this.state.gems.length; i++) {
-            if (gems[i].week == this.props.match.params.week) {
-                let card = <div key={gems[i].id} className="card" style={{ marginTop: 2 + 'em' }} >
+        var messages = this.state.messages; 
+        for (i = 0; i < messages.length; i++) {
+            if (messages[i].week == this.props.match.params.week) {
+                let card = <div key={messages[i].id} className="card" style={{ marginTop: 2 + 'em' }} >
                                <div className="card-header">
-                                    {gems[i].from.name} sent a gem to {gems[i].to.name}
+                                    {messages[i].title}
                                </div>
 
                                <div className="card-body">
-                                    <b>{gems[i].message}</b>
+                                    <b>{messages[i].body}</b>
                                </div>
                            </div>
 
@@ -44,32 +45,34 @@ export class GemWeek extends React.Component {
     }
 
     render() {
-        const gemList = this.renderGems(); 
-        const gems = this.state.loading ? <h6><em>Loading Gems for the Week...</em></h6> : gemList;
+        const messages = this.renderMessages(); 
+        const content = this.state.loading ? <h6><em>Loading Gems for the Week...</em></h6> : messages;
 
         return (
             <>
                 <h3><em>Week {this.props.match.params.week} Report</em></h3>
-                {gems}
+                {content}
             </>
         );
     }
 
-    async populateRocks() {
-        const response = await fetch('api/gem/', {
+    async populateMessages() {
+        const response = await fetch('api/message/', {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                ...{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                ...authHeader()
             }
         });
 
         const data = await response.json();
 
         this.setState({
-            gems: data,
+            messages: data,
             loading: false
-        }); 
-        
+        });
     }
 }

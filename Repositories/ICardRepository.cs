@@ -6,8 +6,8 @@ using GemManager.Models;
 namespace GemManager.Repositories
 {
     public interface ICardRepository
-    {
-        public IEnumerable<Card> GetByUserAndCardType(Guid id, CardType cardType);
+    { 
+        IEnumerable<Card> GetByUserAndCardType(Guid id, CardType cardType);
 
         void Delete(Guid id);
 
