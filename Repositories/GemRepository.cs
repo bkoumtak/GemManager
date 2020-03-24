@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace GemManager.Repositories
 {
-
     public class GemRepository : GenericRepository<Gem>, IGemRepository
     {
         public GemRepository(IConfiguration config):base(config)
