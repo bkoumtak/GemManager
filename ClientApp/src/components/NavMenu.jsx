@@ -95,15 +95,19 @@ export class NavMenu extends Component {
                           <Dropdown.Toggle variant="success" id="dropdown-basic">
                               {currentUser.username}
                           </Dropdown.Toggle>
-                          <Dropdown.Menu>
-                                        <Dropdown.Item className="text-dark" href="/gems-received-page">
-                                                Gems Received
-                                        </Dropdown.Item>
+                                    <Dropdown.Menu>
+                                        {isUser &&
+                                            <>
+                                                <Dropdown.Item className="text-dark" href="/gems-received-page">
+                                                    Gems Received
+                                                </Dropdown.Item>
+                                                <Dropdown.Item className="text-dark" href="/card-page">
+                                                    Cards
+                                                </Dropdown.Item>
+                                            </>
+                                        }
                                         <Dropdown.Item className="text-dark" href="/gems-sent-page">
-                                                Gems Sent
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="text-dark" href="/card-page">
-                                                Cards
+                                            Gems Sent
                                         </Dropdown.Item>
 
                                         <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
