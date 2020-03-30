@@ -1,20 +1,27 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using GemManager.Models;
+using GemManager.Repositories;
 using Microsoft.AspNetCore.Http;
 
 namespace GemManager.Controllers
 {
-    public static class ValidationHelper
+    public class ValidationHelper
     {
+        private static IRepository<User> _userRepository;
+
+        public ValidationHelper(IRepository<User> userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
         public static void ValidateUser(HttpRequest request, out Guid userGuid, out string userRole)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            string jwtToken = request.Headers["Authorization"].ToString();
-            string jwtTokenWithNoBearer = jwtToken.Substring(jwtToken.IndexOf(" ", StringComparison.Ordinal) + 1);
-            var decodedJwt = tokenHandler.ReadJwtToken(jwtTokenWithNoBearer);
-            Guid.TryParse(decodedJwt.Claims.SingleOrDefault(k => k.Type.Equals("nameid"))?.Value, out userGuid);
-            userRole = decodedJwt.Claims.SingleOrDefault(k => k.Type.Equals("role"))?.Value;
+            var usersFromDb = _userRepository.GetAll();
+            User user = usersFromDb.SingleOrDefault(x => 
+                x.Username == request.HttpContext.User.Identity.Name.Replace("GENETEC\\", String.Empty));
+            userGuid = user.Id;
+            userRole = user.Role;
         }
     }
 }

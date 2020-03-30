@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { authHeader, handleResponse } from '../_helpers';
+import { handleResponse } from '../_helpers';
 import { v4 as uuidv4 } from 'uuid'; 
 import { getWeekSince } from '../_helpers/week-helper';
 
@@ -94,8 +94,7 @@ export class UserManagement extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             },
             body: JSON.stringify({
                 id: uuidv4(),
@@ -160,8 +159,7 @@ export class UserManagement extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         });
         const data = await response.json();
@@ -176,8 +174,7 @@ export class UserManagement extends Component {
                         ...{
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
-                        },
-                        ...authHeader()
+                        }
                     },
                 })
             .then(handleResponse)
@@ -197,8 +194,7 @@ export class UserManagement extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             },
             body: JSON.stringify({
                 id: id,

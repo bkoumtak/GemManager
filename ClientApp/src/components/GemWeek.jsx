@@ -1,5 +1,5 @@
 ﻿import React from 'react'; 
-import { authHeader, handleResponse } from '../_helpers';
+import { handleResponse } from '../_helpers';
 
 export class GemWeek extends React.Component {
     constructor(props) {
@@ -63,8 +63,7 @@ export class GemWeek extends React.Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         });
 

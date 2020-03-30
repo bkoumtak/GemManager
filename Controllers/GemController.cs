@@ -10,7 +10,7 @@ namespace GemManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "OnlyEmployees")]
     public class GemController : ControllerBase
     {
         private readonly IGemRepository _gemRepository;

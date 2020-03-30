@@ -10,7 +10,6 @@ import DoubleSend from '../imgs/doubleSend.png';
 import Revive from '../imgs/revive.png'; 
 import Malediction from '../imgs/malediction.png'; 
 import { getWeekSince } from '../_helpers/week-helper';
-import { authHeader } from '../_helpers';
 
 export class DicePage extends React.Component {
     userIndex = 0; 
@@ -210,8 +209,7 @@ export class DicePage extends React.Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         }).then(data => data.json())
             .then(bool => {
@@ -231,8 +229,7 @@ export class DicePage extends React.Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         });
 

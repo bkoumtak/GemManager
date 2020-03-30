@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { authHeader, handleResponse } from '../_helpers';
+import { handleResponse } from '../_helpers';
 import { authenticationService } from '../_services/authentication.service'
 
 export class Home extends Component {
@@ -17,6 +17,8 @@ export class Home extends Component {
     }
 
     componentDidMount() {
+        authenticationService.login();
+
         if (authenticationService.currentUserValue) {
             this.populateUsers();
         }
@@ -137,8 +139,7 @@ export class Home extends Component {
     async populateUsers() {
         const response = await fetch('api/user',
             {
-                method: 'GET',
-                headers: authHeader()
+                method: 'GET'
             }).then(handleResponse);
 
         await this.populateRocks();
