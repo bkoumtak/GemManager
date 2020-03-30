@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace GemManager.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "OnlyEmployees")]
     [Route("api/[controller]")]
     [ApiController]
     public class CardController : ControllerBase

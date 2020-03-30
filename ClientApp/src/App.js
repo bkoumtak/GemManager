@@ -3,7 +3,6 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { UserManagement } from './components/UserManagement';
-import { LoginPage } from './components/Login'; 
 import { AddUser } from './components/Counter';
 import { PrivateRoute } from './components/PrivateRoute'; 
 import { Role } from './_helpers/role'; 
@@ -24,7 +23,6 @@ export default class App extends Component {
       <>
           <Layout>
             <Route exact path='/' component={Home} />
-            <Route path='/login' component={LoginPage} />
             <Route path='/weekly' component={WeekDisplay} />
             <PrivateRoute path='/card-page' component={CardPage}/>
             <PrivateRoute path='/user-page' component={UserPage} />

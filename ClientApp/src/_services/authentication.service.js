@@ -5,16 +5,14 @@ const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('
 
 export const authenticationService = {
     login,
-    logout,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue() { return currentUserSubject.value }
 };
 
-function login(username, password) {
+function login() {
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
     }; 
 
     return fetch('api/user/auth', requestOptions)
@@ -28,9 +26,4 @@ function login(username, password) {
 
             return user; 
         });
-}
-
-function logout() {
-    localStorage.removeItem('currentUser'); 
-    currentUserSubject.next(null); 
 }
