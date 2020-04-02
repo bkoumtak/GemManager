@@ -70,20 +70,10 @@ export class NavMenu extends Component {
                     </div>
                     <Collapse className="d-sm-inline-flex flex-sm-row-reverse col-4" isOpen={!this.state.collapsed} navbar>
                         <ul className="navbar-nav flex-grow">
-                            {!currentUser && 
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/login">Log-in</NavLink>
-                        </NavItem>
-                }
                             {currentUser &&
                     <>
                 {isAdmin &&
                                     <>
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/user-management">
-                                                User Management
-                                             </NavLink>
-                                        </NavItem>
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark" to="/dice-page">
                                                 Gamble
@@ -95,18 +85,27 @@ export class NavMenu extends Component {
                           <Dropdown.Toggle variant="success" id="dropdown-basic">
                               {currentUser.username}
                           </Dropdown.Toggle>
-                          <Dropdown.Menu>
-                                        <Dropdown.Item className="text-dark" href="/gems-received-page">
-                                                Gems Received
-                                        </Dropdown.Item>
+                                    <Dropdown.Menu>
+                                        {isUser &&
+                                            <>
+                                                <Dropdown.Item className="text-dark" href="/gems-received-page">
+                                                    Gems Received
+                                                </Dropdown.Item>
+                                                <Dropdown.Item className="text-dark" href="/card-page">
+                                                    Cards
+                                                </Dropdown.Item>
+                                            </>
+                                        }
+                                        {isAdmin &&
+                                            <>
+                                                <Dropdown.Item className="text-dark" href="/user-management">
+                                                    User Management
+                                                </Dropdown.Item>
+                                            </>
+                                        }
                                         <Dropdown.Item className="text-dark" href="/gems-sent-page">
-                                                Gems Sent
+                                            Gems Sent
                                         </Dropdown.Item>
-                                        <Dropdown.Item className="text-dark" href="/card-page">
-                                                Cards
-                                        </Dropdown.Item>
-
-                                        <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                     </>

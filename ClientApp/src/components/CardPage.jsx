@@ -8,7 +8,6 @@ import DoubleReceive from '../imgs/doubleReceive.png';
 import DoubleSend from '../imgs/doubleSend.png'; 
 import Malediction from '../imgs/malediction.png'; 
 import { authenticationService } from '../_services/authentication.service';
-import { authHeader } from '../_helpers';
 import { getWeekSince } from '../_helpers/week-helper';
 import { handleCardControllerResponse } from '../_helpers/handle-response';
 
@@ -164,8 +163,7 @@ export class CardPage extends Component {
                     ...{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    },
-                    ...authHeader()
+                    }
                 }
             })
             .then(handleCardControllerResponse)
@@ -188,8 +186,7 @@ export class CardPage extends Component {
                             ...{
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
-                            },
-                            ...authHeader()
+                            }
                         }
                 })
                 .then(handleCardControllerResponse)
@@ -214,8 +211,7 @@ export class CardPage extends Component {
                     ...{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    },
-                    ...authHeader()
+                    }
                 }
             })
             .then(handleCardControllerResponse)
@@ -237,8 +233,7 @@ export class CardPage extends Component {
                     ...{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    },
-                    ...authHeader()
+                    }
                 }
                 })
                 .then(handleCardControllerResponse)
@@ -260,8 +255,7 @@ export class CardPage extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         })
             .then(handleCardControllerResponse)
@@ -285,8 +279,7 @@ export class CardPage extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         })
             .then(handleCardControllerResponse)
@@ -308,8 +301,7 @@ export class CardPage extends Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         })
             .then(handleCardControllerResponse)
@@ -333,8 +325,7 @@ export class CardPage extends Component {
                 ...{
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         })
             .then(handleCardControllerResponse)

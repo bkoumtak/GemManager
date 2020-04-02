@@ -63,8 +63,7 @@ export class GemWeek extends React.Component {
                 ...{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                ...authHeader()
+                }
             }
         });
 

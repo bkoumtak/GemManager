@@ -1,102 +1,47 @@
 ﻿using System;
 using System.DirectoryServices.AccountManagement;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using GemManager.Commands;
 using GemManager.Enumerations;
-using GemManager.Helpers;
 using GemManager.Models;
 using GemManager.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 namespace GemManager.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "OnlyEmployees")]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
         private readonly IRepository<User> _userRepository;
-        private readonly AppSettings _appSettings;
         private readonly IMediator _mediator;
 
-        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IOptions<AppSettings> appSettings, IMediator mediator)
+        public UserController(ILogger<UserController> logger, IRepository<User>  userRepository, IMediator mediator)
         {
             _logger = logger;
             _userRepository = userRepository;
-            _appSettings = appSettings.Value;
             _mediator = mediator;
         }
 
-        [AllowAnonymous]
-        [HttpPost("auth")]
-        public IActionResult Authenticate([FromBody]AuthenticateModel model)
+        [HttpGet("auth")]
+        public IActionResult Authenticate()
         {
             using (var adContext = new PrincipalContext(ContextType.Domain, "genetec.com"))
             {
-                var result = adContext.ValidateCredentials(model.Username, model.Password, ContextOptions.Signing);
-                User user;
-
-                if (result)
-                {
-                    var usersFromDb = _userRepository.GetAll();
-                    UserPrincipal userFromAd = UserPrincipal.FindByIdentity(adContext, model.Username);
-                    user = usersFromDb.SingleOrDefault(x => x.Id == userFromAd?.Guid);
-
-                    if (user == null)
-                    {
-                        user = new User()
-                        {
-                            Id = userFromAd.Guid.GetValueOrDefault(),
-                            FirstName = userFromAd.GivenName,
-                            LastName = userFromAd.Surname,
-                            Name = userFromAd.Name,
-                            Username = userFromAd.SamAccountName,
-                            Role = "User"
-                        };
-
-                        _userRepository.Save(user);
-                    }
-
-                    IdentityModelEventSource.ShowPII = true;
-
-                    // authentication successful so generate jwt token
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                            new Claim(ClaimTypes.Name, model.Username),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                            new Claim(ClaimTypes.Role, user.Role)
-                        }),
-                        Expires = DateTime.UtcNow.AddDays(7),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                            SecurityAlgorithms.HmacSha256Signature),
-                        Issuer = "genetec.com",
-                        Audience = "genetec.com"
-                    };
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-
-                    user.Token = tokenHandler.WriteToken(token);
-                    
-                    return Ok(user);
-                }
+                var usersFromDb = _userRepository.GetAll();
+                UserPrincipal userFromAd = UserPrincipal.FindByIdentity(adContext, HttpContext.User.Identity.Name.Replace("GENETEC\\", String.Empty));
+                User user = usersFromDb.SingleOrDefault(x => x.Id == userFromAd?.Guid);
+                
+                return Ok(user);
             }
-            return BadRequest(new { message = "Username or password is incorrect" });
         }
-        [AllowAnonymous]
+        
         [HttpGet]
         public ActionResult Get()
         {
