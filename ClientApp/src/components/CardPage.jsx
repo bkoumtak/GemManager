@@ -152,7 +152,8 @@ export class CardPage extends Component {
     }
 
     /* Call your backend here */
-    async maledictionHandler() {
+    async maledictionHandler(e) {
+        e.preventDefault();
         let targetIndex = this.state.formControls.mTarget.value;
         let target = this.state.users[targetIndex];
 
@@ -200,10 +201,11 @@ export class CardPage extends Component {
         }
     }
 
-    async doubleReceiveHandler() {
+    async doubleReceiveHandler(e) {
+        e.preventDefault();
         let targetIndex = this.state.formControls.drTarget.value;
-        let target = this.state.users[targetIndex]; 
-        
+        let target = this.state.users[targetIndex];
+
         await fetch('api/card/double_receive/' + target.id + '/' + getWeekSince(),
             {
                 method: 'GET',
@@ -247,7 +249,8 @@ export class CardPage extends Component {
         }
     }
 
-    async selfHugHandler() {
+    async selfHugHandler(e) {
+        e.preventDefault()
         let gems = this.state.formControls.shGems.value; 
         await fetch('api/card/self_hug/' + gems, {
             method: 'GET',
@@ -268,7 +271,8 @@ export class CardPage extends Component {
             });
     }
 
-    async robinHoodHandler() {
+    async robinHoodHandler(e) {
+        e.preventDefault();
         let sourceIndex = this.state.formControls.rhSource.value;
         let targetIndex = this.state.formControls.rhTarget.value;
         let source = this.state.users[sourceIndex]; 
@@ -292,7 +296,8 @@ export class CardPage extends Component {
             });
     }
 
-    async stealGemHandler() {
+    async stealGemHandler(e) {
+        e.preventDefault();
         let targetIndex = this.state.formControls.sgTarget.value;
         let target = this.state.users[targetIndex];
         await fetch('api/card/steal_gem/' + target.id, {
@@ -314,7 +319,8 @@ export class CardPage extends Component {
             });
     }
 
-    async stealCardHandler() {
+    async stealCardHandler(e) {
+        e.preventDefault();
         let targetIndex = this.state.formControls.scTarget.value;
         let target = this.state.users[targetIndex];
         let cardType = this.state.formControls.scType.value; 
@@ -444,7 +450,7 @@ export class CardPage extends Component {
                         <form class="form-inline">
                         <label class="mr-sm-2" for="selfHugInputGems"><strong>Gems to give yourself:</strong></label>
                             <input type="number" id="selfHugInputGems" placeholder={0}
-                                name="shGems" value={this.state.formControls.shGems.value} onChange={this.changeHandler}/>
+                                name="shGems" value={this.state.formControls.shGems.value} onChange={this.changeHandler} min="1"/>
                             <button type="submit" class="btn btn-primary mb-2" onClick={this.selfHugHandler.bind(this)}>Submit</button>
                         </form>
                         </div>
