@@ -1,5 +1,6 @@
 ﻿import React from 'react'; 
-import { handleResponse } from '../_helpers';
+import { authHeader, handleResponse } from '../_helpers';
+import { getNow, getTimeToDisplay } from '../_helpers/week-helper';
 
 export class GemWeek extends React.Component {
     constructor(props) {
@@ -16,12 +17,13 @@ export class GemWeek extends React.Component {
 
     renderMessages() {
         var content;
+        var week = this.props.match.params.week; 
 
         var i;
         var list = [];
         var messages = this.state.messages; 
         for (i = 0; i < messages.length; i++) {
-            if (messages[i].week == this.props.match.params.week) {
+            if (messages[i].week == week) {
                 let card = <div key={messages[i].id} className="card" style={{ marginTop: 2 + 'em' }} >
                                <div className="card-header">
                                     {messages[i].title}
@@ -36,10 +38,8 @@ export class GemWeek extends React.Component {
             }
         }
 
-        if (list.length > 0)
+        if (getNow() > getTimeToDisplay(week));
             content = list; 
-        else 
-            content = <em>There are no gems that have been transferred yet this week.</em>
 
         return content; 
     }
