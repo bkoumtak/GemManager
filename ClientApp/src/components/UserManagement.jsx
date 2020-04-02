@@ -8,6 +8,9 @@ export class UserManagement extends Component {
 
     constructor(props) {
         super(props);
+
+        this.populateUsers = this.populateUsers.bind(this);
+
         this.state = {
             users: [],
             loading: true,
@@ -178,12 +181,10 @@ export class UserManagement extends Component {
                     },
                 })
             .then(handleResponse)
+            .then(this.populateUsers)
             .catch((error) => {
                 alert(error);
-            })
-            .then(
-                window.location.reload()
-            );
+            });
     }
 
     async pushUserRocks(id, rocks) {

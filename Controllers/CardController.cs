@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using System.Threading.Tasks;
 using System;
@@ -93,6 +93,9 @@ namespace GemManager.Controllers
         {
             var gemsToGive = Int32.Parse(gems);
             
+            if (gemsToGive <= 0)
+                return Conflict(new { message = "The negative numbers or 0 are not allowed!" });
+
             try
             {
                 var isOperationSuccessful = await _mediator.Send(new SelfHugCommand(Request, gemsToGive));
