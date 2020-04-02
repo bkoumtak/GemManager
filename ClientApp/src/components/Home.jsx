@@ -119,9 +119,7 @@ export class Home extends Component {
 
     render() {
         let contents; 
-        if (!authenticationService.currentUserValue) {
-            contents = <p><em>You're not logged in to the website yet...</em></p>
-        } else {
+        if (authenticationService.currentUserValue) {
             contents = this.state.loading
                         ? <p><em>Loading...</em></p>
                         : Home.renderUsers(this.state.users);
