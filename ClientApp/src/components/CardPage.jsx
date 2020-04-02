@@ -407,7 +407,7 @@ export class CardPage extends Component {
         let currentUserGuid = authenticationService.currentUserValue.id; 
 
         let dropdownList = this.state.users.map((user, index) => {
-            if (user.id != currentUserGuid)
+            if (user.id !== currentUserGuid && user.role !== "Admin")
                 return <option key={index} value={index}>{user.name}</option>
         });
 
