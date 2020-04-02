@@ -72,7 +72,7 @@ export class Home extends Component {
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Rocks to give</th>
+                        <th>Gems to give</th>
                         <th style={{ textAlign: 'center' }}>Total Gems</th>
                     </tr>
                     </thead>
@@ -89,7 +89,7 @@ export class Home extends Component {
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Rocks to give</th>
+                            <th>Gems to give</th>
                             <th style={{ textAlign: 'center' }}>Total Gems</th>
                         </tr>
                     </thead>
