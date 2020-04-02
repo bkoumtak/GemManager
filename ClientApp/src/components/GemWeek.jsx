@@ -38,8 +38,8 @@ export class GemWeek extends React.Component {
             }
         }
 
-        if (getNow() > getTimeToDisplay(week));
-            content = list; 
+        if (getNow() > getTimeToDisplay(week))
+             content = list;
 
         return content; 
     }

@@ -113,7 +113,7 @@ export class UserManagement extends Component {
             : UserManagement.renderUsers(this.state.users, this.state.addOrSubstractRocks);
 
         let userList = this.state.users.map((user, index) => {
-            if (user.role != "admin") {
+            if (user.role != "Admin") {
                 return <option key={index} value={index}>{user.firstName}</option>
             }
         });
