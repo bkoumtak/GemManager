@@ -11,7 +11,7 @@ export function getWeekSince() {
 export function getTimeToDisplay(week) {
     const startDate = "2020-01-06"; 
     var currentDate = moment(startDate).add(week, 'weeks'); 
-    var currentTime = currentDate.add(15, 'hours'); 
+    var currentTime = currentDate.add(16, 'hours'); 
     return currentTime; 
 }
 
