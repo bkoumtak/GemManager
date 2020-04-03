@@ -31,19 +31,17 @@ export class UserPage extends React.Component {
         }
 
         this.setState({
-            toUserIndex: id, 
+            toUserIndex: id,
             dropDownClicked: true
-        })
+        });
     }
 
     textMessageChangeHandler(event) {
-        let text = event.target.value; 
-
-        console.log(text); 
+        let text = event.target.value;
 
         this.setState({
             currentTextMessage: text
-        })
+        });
     }
 
     submitChoice() {
@@ -110,7 +108,7 @@ export class UserPage extends React.Component {
         let currentUser = this.state.currentUser; 
  
         let list = users.map((user,index) => {
-            if (user.id != currentUser.id) {
+            if (user.id !== currentUser.id && user.role !== "Admin") {
                 return <option key={index} value={index}>{user.name}</option>
             }
         });

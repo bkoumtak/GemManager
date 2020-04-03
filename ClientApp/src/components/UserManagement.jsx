@@ -50,7 +50,7 @@ export class UserManagement extends Component {
                 <thead>
                 <tr>
                     <th>User</th>
-                    <th>Number of Rocks</th>
+                    <th>Number of Gems</th>
                     <th style={{ textAlign: 'center' }}>Actions</th>
                 </tr>
                 </thead>
@@ -116,8 +116,8 @@ export class UserManagement extends Component {
             : UserManagement.renderUsers(this.state.users, this.state.addOrSubstractRocks);
 
         let userList = this.state.users.map((user, index) => {
-            if (user.role != "Admin") {
-                return <option key={index} value={index}>{user.firstName}</option>
+            if (user.role != "Admin" && user.name != "Graveyard") {
+                return <option key={index} value={index}>{user.name}</option>
             }
         });
 

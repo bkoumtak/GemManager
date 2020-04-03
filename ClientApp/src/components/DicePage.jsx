@@ -114,8 +114,8 @@ export class DicePage extends React.Component {
 
     render() {
         let list = this.state.users.map((user, index) => {
-            if (user.role === "User") {
-                return <option key={index} value={index}>{user.firstName}</option>
+            if (user.role === "User" && user.name !== "Graveyard") {
+                return <option key={index} value={index}>{user.name}</option>
             }
         }); 
 
