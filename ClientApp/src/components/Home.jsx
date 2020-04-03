@@ -63,7 +63,7 @@ export class Home extends Component {
         if (user)
             userStats = <tr>
                             <td><b>{(usersWithoutGraveyard.indexOf(user) + 1) + '. ' + user.name}</b></td>
-                            <td>{user.gemsToGive}</td>
+                            <td style={{ textAlign: 'center' }}>{user.gemsToGive}</td>
                             <td style={{ textAlign: 'center' }}>{user.totalGems}</td>
                         </tr>
 
@@ -74,7 +74,7 @@ export class Home extends Component {
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Gems to give</th>
+                         <th style={{ textAlign: 'center' }}>Gems to give</th>
                         <th style={{ textAlign: 'center' }}>Total Gems</th>
                     </tr>
                     </thead>
@@ -91,7 +91,7 @@ export class Home extends Component {
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Gems to give</th>
+                            <th style={{ textAlign: 'center' }}>Gems to give</th>
                             <th style={{ textAlign: 'center' }}>Total Gems</th>
                         </tr>
                     </thead>
@@ -105,7 +105,7 @@ export class Home extends Component {
                                     if (user.name != "Graveyard") {
                                         return <tr key={user.id}>
                                                    <td>{++n + '. ' + user.name}</td>
-                                                   <td>{user.gemsToGive}</td>
+                                                   <td align="center">{user.gemsToGive}</td>
                                                    <td align="center">{user.totalGems}</td>
                                                </tr>
                                     }

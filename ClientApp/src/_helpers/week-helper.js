@@ -10,9 +10,9 @@ export function getWeekSince() {
 
 export function getTimeToDisplay(week) {
     const startDate = "2020-01-06"; 
-    var currentDate = moment(startDate).add(week, 'weeks'); 
-    var currentTime = currentDate.add(16, 'hours'); 
-    return currentTime; 
+    var dateToDisplay = moment(startDate).add(week, 'weeks').add(4, 'days'); 
+    var timeToDisplay = dateToDisplay.add(16, 'hours'); 
+    return timeToDisplay; 
 }
 
 export function getNow() {

@@ -39,12 +39,12 @@ export class GemsReceived extends React.Component {
 
             if (gem.to.id == currentUser.id) {
                 let button = <button className="btn btn-squared-default btn-info mb-1 " onClick={this.displayMessage.bind(this,
-                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from.firstName}</button>;
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from && gem.from.firstName}</button>;
                 let button_new = <><button className="btn btn-squared-default btn-info mb-1" onClick={this.displayMessage.bind(this,
-                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from.firstName}</button><br /></>
-                i++; 
+                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.from && gem.from.firstName}</button><br /></>
+                i++;
                 if (i % 5 === 0)
-                    return button_new
+                    return button_new;
                 else
                     return button;
             }

@@ -36,17 +36,23 @@ export class GemsSent extends React.Component {
         var sortedGems = this.state.gems.sort(this.sortGemsWeek); 
 
         var list = sortedGems.map(gem => {
-
-            if (gem.from.id == currentUser.id) {
-                let button = <button className="btn btn-squared-default btn-danger mb-1 " onClick={this.displayMessage.bind(this,
-                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.to.firstName}</button>;
-                let button_new = <><button className="btn btn-squared-default btn-danger mb-1" onClick={this.displayMessage.bind(this,
-                    gem.message)}><i class="fas fa-gem fa-4x"></i><br /><br />{gem.to.firstName}</button><br /></>
-                i++;
-                if (i % 5 === 0)
-                    return button_new
-                else
-                    return button;
+            if (gem.from) {
+                if (gem.from.id == currentUser.id) {
+                    let button =
+                        <button className="btn btn-squared-default btn-danger mb-1 " onClick={this.displayMessage.bind(
+                            this,
+                            gem.message)}><i class="fas fa-gem fa-4x"></i><br/><br/>{gem.to.firstName}</button>;
+                    let button_new =
+                        <><button className="btn btn-squared-default btn-danger mb-1" onClick={this.displayMessage.bind(
+                            this,
+                            gem.message)}><i class="fas fa-gem fa-4x"></i><br/><br/>{gem.to.firstName
+                            }</button><br/></>
+                    i++;
+                    if (i % 5 === 0)
+                        return button_new
+                    else
+                        return button;
+                }
             }
         });
 

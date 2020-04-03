@@ -40,7 +40,7 @@ export class GemWeek extends React.Component {
 
         if (getNow() > getTimeToDisplay(week))
              content = list;
-
+        console.log(getTimeToDisplay(week).format('MMMM Do YYYY, h:mm:ss a'));
         return content; 
     }
 
