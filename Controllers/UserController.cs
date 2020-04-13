@@ -45,7 +45,7 @@ namespace GemManager.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var users = _userRepository.GetAll();
+            var users = _userRepository.GetAll().OrderBy(x => x.FirstName);
             
             return Ok(users);
         }
