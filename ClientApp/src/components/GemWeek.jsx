@@ -1,6 +1,8 @@
 ﻿import React from 'react'; 
 import { authHeader, handleResponse } from '../_helpers';
 import { getNow, getTimeToDisplay } from '../_helpers/week-helper';
+import { authenticationService } from '../_services/authentication.service';
+import { Role } from '../_helpers/role'; 
 
 export class GemWeek extends React.Component {
     constructor(props) {
@@ -38,7 +40,7 @@ export class GemWeek extends React.Component {
             }
         }
 
-        if (getNow() > getTimeToDisplay(week))
+        if (getNow() > getTimeToDisplay(week) || authenticationService.currentUserValue.role == Role.Admin)
              content = list;
         console.log(getTimeToDisplay(week).format('MMMM Do YYYY, h:mm:ss a'));
         return content; 
