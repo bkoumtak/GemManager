@@ -35,10 +35,21 @@ namespace GemManager.Controllers
             if (userGuid == gems.From.Id) { 
                 var curUser = _userRepository.GetById(gems.From.Id);
                 var targetUser = _userRepository.GetById(gems.To.Id);
+                var titleString = ""; 
+
+                if (targetUser.Name.Equals("Graveyard"))
+                {
+                    titleString = curUser.Name + " dumped the gem into the graveyard.";
+                }
+                else
+                {
+                    titleString = curUser.Name + " gave a gem to " + targetUser.Name;
+                }
+
                 var messageLog = new Message
                 {
                     Id = Guid.NewGuid(),
-                    Title = curUser.FirstName + " gave a gem to " + targetUser.FirstName,
+                    Title = titleString,
                     Body = gems.Message,
                     Week = gems.Week
                 };
