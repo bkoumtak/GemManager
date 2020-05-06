@@ -1,7 +1,7 @@
 ﻿import moment from 'moment';
 
 export function getWeekSince() {
-    const startDate = "2020-01-06"; 
+    const startDate = "2020-05-04"; 
     var today = moment(); 
     var beginning = moment(startDate);
 
@@ -9,7 +9,7 @@ export function getWeekSince() {
 }
 
 export function getTimeToDisplay(week) {
-    const startDate = "2020-01-06"; 
+    const startDate = "2020-05-04"; 
     var dateToDisplay = moment(startDate).add(week, 'weeks').add(4, 'days'); 
     var timeToDisplay = dateToDisplay.add(16, 'hours'); 
     return timeToDisplay; 
