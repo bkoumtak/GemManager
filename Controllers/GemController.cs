@@ -18,12 +18,16 @@ namespace GemManager.Controllers
         private readonly IRepository<Message> _messageRepository;
         private readonly ICardRepository _cardRepository;
 
+        private readonly DateTime _startDateTime;
+
         public GemController(IGemRepository gemRepository, IRepository<User> userRepository, IRepository<Message> messageRepository, ICardRepository cardRepository)
         {
             _gemRepository = gemRepository;
             _userRepository = userRepository;
             _messageRepository = messageRepository;
             _cardRepository = cardRepository;
+
+            _startDateTime = new DateTime(2020, 5, 4, 8, 0, 0); 
         }
 
         [HttpPost]
@@ -46,13 +50,18 @@ namespace GemManager.Controllers
                     titleString = curUser.Name + " gave a gem to " + targetUser.Name;
                 }
 
+                var today = DateTime.Today;
+                var week = ((int) (today - _startDateTime).TotalDays / 7) + 1; 
+
                 var messageLog = new Message
                 {
                     Id = Guid.NewGuid(),
                     Title = titleString,
                     Body = gems.Message,
-                    Week = gems.Week
+                    Week = week
                 };
+
+                gems.Week = week;
 
                 _messageRepository.Save(messageLog);
                 msg = MaledictionCardGemsDivert(gems, msg);
