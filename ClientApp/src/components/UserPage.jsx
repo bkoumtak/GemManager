@@ -70,7 +70,6 @@ export class UserPage extends React.Component {
             },
            body: JSON.stringify({
                id: guid,
-               week: getWeekSince(),
                from: {
                    id: currentUser.id
                },
