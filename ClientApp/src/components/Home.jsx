@@ -17,11 +17,11 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        authenticationService.login();
-
-        if (authenticationService.currentUserValue) {
-            this.populateUsers();
-        }
+        authenticationService.login().then(() => {
+            if (authenticationService.currentUserValue) {
+                this.populateUsers();
+            }
+        });
     }
 
     async populateRocks() {
