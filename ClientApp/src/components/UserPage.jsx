@@ -97,6 +97,11 @@ export class UserPage extends React.Component {
                             gemsToGive: currentUser.gemsToGive
                         })
                     });
+
+                    this.setState({
+                        currentTextMessage: "n/a",
+                        toUserIndex: 0
+                    });
         })
         .catch((error) => {
             alert(error);
@@ -121,8 +126,8 @@ export class UserPage extends React.Component {
            msg = <div className="form-group">
             <label htmlFor="reasonTextArea">Why are you giving this gem to {this.state.users[toUserIndex]
                 .name} ?</label>
-            <textarea className="form-control" id="reasonTextArea" rows="3" onChange={this
-                .textMessageChangeHandler.bind(this)}></textarea>
+               <textarea className="form-control" id="reasonTextArea" rows="3" onChange={this
+                   .textMessageChangeHandler.bind(this)} value={this.state.currentTextMessage}></textarea>
         </div>
         } else {
             msg = <div className="form-group"></div>;
@@ -135,7 +140,7 @@ export class UserPage extends React.Component {
                 { this.state.currentUser.gemsToGive > 0 && 
                     <>
                         <label className="mr-sm-2" htmlFor="toUser">Give a gem to: </label>
-                        <select className="form-control mr-sm-2" id="toUser" onChange={this.toUserChangeHandler.bind(this)}>
+                        <select className="form-control mr-sm-2" id="toUser" onChange={this.toUserChangeHandler.bind(this)} value={this.state.toUserIndex}>
                             {list}
                         </select>  
 
