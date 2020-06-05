@@ -24,6 +24,10 @@ export class UserPage extends React.Component {
     toUserChangeHandler(event) {
         let id = event.target.value;
 
+        this.setState({
+            currentTextMessage: ""
+        });
+
         if (this.state.users[id].name == "Graveyard") {
             this.setState({
                 currentTextMessage: "n/a"
